@@ -4220,28 +4220,33 @@ function gemFetchCache() {
   });
 }
 
-function gemParseCsvLine(line) {
-  const cols = []; let cur = '', inQ = false;
-  for (let i = 0; i < line.length; i++) {
-    const c = line[i];
+// Parse full CSV text into array of rows, each row an array of field strings.
+// Handles quoted fields containing commas, newlines, and escaped "" quotes.
+function gemParseCsv(text) {
+  const rows = []; let cols = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
     if (inQ) {
       if (c === '"') {
-        if (line[i+1] === '"') { cur += '"'; i++; } // escaped ""
+        if (text[i+1] === '"') { cur += '"'; i++; }
         else { inQ = false; }
       } else { cur += c; }
     } else {
       if (c === '"') { inQ = true; }
       else if (c === ',') { cols.push(cur); cur = ''; }
+      else if (c === '\n') {
+        cols.push(cur); cur = '';
+        rows.push(cols); cols = [];
+      } else if (c === '\r') { /* skip */ }
       else { cur += c; }
     }
   }
-  cols.push(cur);
-  return cols;
+  if (cur || cols.length) { cols.push(cur); rows.push(cols); }
+  return rows;
 }
 
-function gemStripCsvQuotes(s) {
-  return s; // gemParseCsvLine already strips quotes and unescapes ""
-}
+function gemParseCsvLine(line) { return gemParseCsv(line)[0] || []; }
+function gemStripCsvQuotes(s) { return s; }
 
 function gemOpenLoad() {
   if (!GEM_SHEET_ID) { alert('GEM_SHEET_ID not set.'); return; }
@@ -4252,12 +4257,9 @@ function gemOpenLoad() {
   document.getElementById('gemLoadModal').style.display = 'flex';
   gemFetchCache()
     .then(csv => {
-      const lines = csv.trim().split('\n');
-      if (lines.length < 2) { statusEl.textContent = 'No saved templates yet.'; return; }
-      const templates = JSON.parse(gemStripCsvQuotes(lines[1].split(',').slice(0,1).join('')) || '[]');
-      // A2 is the whole first column of row 2 — but it contains JSON with commas, so re-parse properly
-      const row2cols = gemParseCsvLine(lines[1]);
-      const templateList = JSON.parse(gemStripCsvQuotes(row2cols[0]) || '[]');
+      const rows = gemParseCsv(csv);
+      if (rows.length < 2) { statusEl.textContent = 'No saved templates yet.'; return; }
+      const templateList = JSON.parse(rows[1][0] || '[]');
       statusEl.textContent = templateList.length ? templateList.length + ' template(s) saved' : 'No saved templates yet.';
       listEl.innerHTML = templateList.map(t => `
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e5e5e5;border-radius:8px;margin-bottom:8px;">
@@ -4276,13 +4278,13 @@ function gemLoadTemplate(id) {
   const statusEl = document.getElementById('gemLoadStatus');
   statusEl.textContent = 'Loading template…';
   gemFetchCache().then(csv => {
-    const lines = csv.trim().split('\n');
+    const rows = gemParseCsv(csv);
     // Rows from index 2 onward: col B = id (index 1), col C = state JSON (index 2)
-    for (let i = 2; i < lines.length; i++) {
-      const cols = gemParseCsvLine(lines[i]);
-      const rowId = gemStripCsvQuotes(cols[1] || '');
+    for (let i = 2; i < rows.length; i++) {
+      const cols = rows[i];
+      const rowId = cols[1] || '';
       if (rowId === id) {
-        const stateRaw = gemStripCsvQuotes(cols[2] || '');
+        const stateRaw = cols[2] || '';
         document.getElementById('gemLoadModal').style.display = 'none';
         gemApplyState(JSON.parse(stateRaw));
         return;
