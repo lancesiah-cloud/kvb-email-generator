@@ -4224,18 +4224,23 @@ function gemParseCsvLine(line) {
   const cols = []; let cur = '', inQ = false;
   for (let i = 0; i < line.length; i++) {
     const c = line[i];
-    if (c === '"') { inQ = !inQ; }
-    else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
-    else { cur += c; }
+    if (inQ) {
+      if (c === '"') {
+        if (line[i+1] === '"') { cur += '"'; i++; } // escaped ""
+        else { inQ = false; }
+      } else { cur += c; }
+    } else {
+      if (c === '"') { inQ = true; }
+      else if (c === ',') { cols.push(cur); cur = ''; }
+      else { cur += c; }
+    }
   }
   cols.push(cur);
   return cols;
 }
 
 function gemStripCsvQuotes(s) {
-  s = s.trim();
-  if (s.startsWith('"') && s.endsWith('"')) s = s.slice(1, -1).replace(/""/g, '"');
-  return s;
+  return s; // gemParseCsvLine already strips quotes and unescapes ""
 }
 
 function gemOpenLoad() {
