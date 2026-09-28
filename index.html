@@ -1162,13 +1162,16 @@
         </div>
         <div style="padding:16px 18px 16px;">
           <div class="field-group">
-            <input type="url" id="bannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="url" id="bannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()" style="flex:1;min-width:0;">
+              <button onclick="gemPickImage('bannerUrl')" style="flex-shrink:0;padding:6px 10px;background:#f0f2f5;border:1px solid #dde1e7;border-radius:6px;cursor:pointer;font-size:12px;color:#0a1e3d;white-space:nowrap;">📁 Upload</button>
+            </div>
           </div>
           <div class="field-group" style="margin-top:8px;">
             <div class="field-label">Banner Link URL <span style="font-weight:400;color:var(--kvb-muted);">(optional)</span></div>
             <input type="url" id="bannerLinkUrl" placeholder="https://mykvb.com/…" oninput="updatePreview()">
           </div>
-          <div class="hint-text">Paste a CRM-hosted banner URL. Preview shows placeholder when blank.</div>
+          <div class="hint-text">Paste a URL or upload an image (JPG, PNG, WebP, SVG). Preview shows placeholder when blank.</div>
         </div>
       </div>
 
@@ -1212,7 +1215,10 @@
           <!-- Banner URL -->
           <div class="field-group">
             <div class="field-label">Banner Image URL (WMI-specific)</div>
-            <input type="url" id="wmiBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="url" id="wmiBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()" style="flex:1;min-width:0;">
+              <button onclick="gemPickImage('wmiBannerUrl')" style="flex-shrink:0;padding:6px 10px;background:#f0f2f5;border:1px solid #dde1e7;border-radius:6px;cursor:pointer;font-size:12px;color:#0a1e3d;white-space:nowrap;">📁 Upload</button>
+            </div>
           </div>
 
           <!-- Intro summary -->
@@ -4142,6 +4148,23 @@ function addSectionFromModal(sectionId) {
 const GEM_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyUQZ0nGNV_xkeAr1JUIKjmlGjBO9D6FzGXQve9ykOu2cBNKr1NfzHUqjguAdW54t9fg/exec';
 const GEM_SHEET_ID = '1xvTq0Rq6rBPAu-845gg7W--McQ2SFUTKGH5ZvWjw_O8';
 const GEM_CACHE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjN2F42Cz-iI3eGXL9rE5BTPUEtBTG4L_Cy74mcqRaVfWOpj1CYSM2crMncBrXCj0KJJyJFJVur6ts/pub?gid=935728189&single=true&output=csv';
+
+function gemPickImage(inputId) {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/jpeg,image/png,image/webp,image/svg+xml';
+  input.onchange = function() {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const el = document.getElementById(inputId);
+      if (el) { el.value = e.target.result; updatePreview(); }
+    };
+    reader.readAsDataURL(file);
+  };
+  input.click();
+}
 
 function gemCollectState() {
   // Collect all field values into a plain object
