@@ -1795,7 +1795,10 @@ function setTypeConfig(type) {
         `<div style="padding:14px 18px 14px;">
           <div class="field-group">
             <div class="field-label">Banner Image URL</div>
-            <input type="url" id="webinarBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()">
+            <div style="display:flex;gap:8px;align-items:center;">
+              <input type="url" id="webinarBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()" style="flex:1;min-width:0;">
+              <button onclick="gemPickImage('webinarBannerUrl')" style="flex-shrink:0;padding:6px 10px;background:#f0f2f5;border:1px solid #dde1e7;border-radius:6px;cursor:pointer;font-size:12px;color:#0a1e3d;white-space:nowrap;">📁 Upload</button>
+            </div>
           </div>
           <div class="field-group" style="margin-top:8px;">
             <div class="field-label">Banner Link URL <span style="font-weight:400;color:var(--kvb-muted);">(optional)</span></div>
@@ -2449,7 +2452,10 @@ function renderWMICards() {
       </div>
       <div style="margin-bottom:6px;">
         <div class="field-label">Chart Image URL</div>
-        <input type="url" value="${escAttr(card.chartUrl)}" placeholder="https://static.mykvb.com/crm/…" style="font-size:11px;" oninput="wmiCards[${ci}].chartUrl=this.value;updatePreview()">
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input type="url" id="wmi-chart-${ci}" value="${escAttr(card.chartUrl)}" placeholder="https://static.mykvb.com/crm/…" style="font-size:11px;flex:1;min-width:0;" oninput="wmiCards[${ci}].chartUrl=this.value;updatePreview()">
+          <button onclick="gemPickImage('wmi-chart-${ci}',function(v){wmiCards[${ci}].chartUrl=v;updatePreview();})" style="flex-shrink:0;padding:4px 8px;background:#f0f2f5;border:1px solid #dde1e7;border-radius:6px;cursor:pointer;font-size:11px;color:#0a1e3d;white-space:nowrap;">📁</button>
+        </div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
         <div>
@@ -3938,7 +3944,10 @@ function addSectionFromModal(sectionId) {
     newSection.dataset.uid = bannerUid;
     newSection.innerHTML = handle + `<div style="padding:12px 18px;">
       <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);display:block;margin-bottom:4px;">Banner Image URL</label>
-      <input type="url" id="${bannerUid}_url" placeholder="https://..." style="width:100%;font-size:13px;" oninput="updatePreview()">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="url" id="${bannerUid}_url" placeholder="https://..." style="flex:1;min-width:0;font-size:13px;" oninput="updatePreview()">
+        <button onclick="gemPickImage('${bannerUid}_url')" style="flex-shrink:0;padding:6px 10px;background:#f0f2f5;border:1px solid #dde1e7;border-radius:6px;cursor:pointer;font-size:12px;color:#0a1e3d;white-space:nowrap;">📁 Upload</button>
+      </div>
       <div class="hint-text" style="margin-top:4px;">Full-width banner image (600px wide).</div>
     </div>`;
   } else if (sectionId === 'table') {
@@ -4059,7 +4068,10 @@ function addSectionFromModal(sectionId) {
       `<div style="padding:14px 18px 14px;">
         <div class="field-group">
           <div class="field-label">Banner Image URL</div>
-          <input type="url" id="webinarBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()">
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="url" id="webinarBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()" style="flex:1;min-width:0;">
+            <button onclick="gemPickImage('webinarBannerUrl')" style="flex-shrink:0;padding:6px 10px;background:#f0f2f5;border:1px solid #dde1e7;border-radius:6px;cursor:pointer;font-size:12px;color:#0a1e3d;white-space:nowrap;">📁 Upload</button>
+          </div>
           <div class="hint-text" style="margin-top:4px;">Full-width banner (600px wide). Leave blank to omit.</div>
         </div>
       </div>`);
@@ -4149,7 +4161,7 @@ const GEM_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyUQZ0nGNV_xkeA
 const GEM_SHEET_ID = '1xvTq0Rq6rBPAu-845gg7W--McQ2SFUTKGH5ZvWjw_O8';
 const GEM_CACHE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjN2F42Cz-iI3eGXL9rE5BTPUEtBTG4L_Cy74mcqRaVfWOpj1CYSM2crMncBrXCj0KJJyJFJVur6ts/pub?gid=935728189&single=true&output=csv';
 
-function gemPickImage(inputId) {
+function gemPickImage(inputId, callback) {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = 'image/jpeg,image/png,image/webp,image/svg+xml';
@@ -4158,8 +4170,11 @@ function gemPickImage(inputId) {
     if (!file) return;
     const reader = new FileReader();
     reader.onload = function(e) {
+      const dataUrl = e.target.result;
       const el = document.getElementById(inputId);
-      if (el) { el.value = e.target.result; updatePreview(); }
+      if (el) el.value = dataUrl;
+      if (callback) callback(dataUrl);
+      else updatePreview();
     };
     reader.readAsDataURL(file);
   };
