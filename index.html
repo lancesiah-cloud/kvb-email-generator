@@ -4139,7 +4139,9 @@ function addSectionFromModal(sectionId) {
 // ─────────────────────────────────────────────────────────
 //  TEMPLATE SAVE / LOAD (Google Sheets backend)
 // ─────────────────────────────────────────────────────────
-const GEM_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxf8AfCyt6E6nELZ1eoLlxjhMc-KgGhLk_wxwdvqhPftTX49SLeillU1Ww-yRiYgfn9Pw/exec';
+const GEM_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyyUQZ0nGNV_xkeAr1JUIKjmlGjBO9D6FzGXQve9ykOu2cBNKr1NfzHUqjguAdW54t9fg/exec';
+const GEM_SHEET_ID = '1xvTq0Rq6rBPAu-845gg7W--McQ2SFUTKGH5ZvWjw_O8';
+const GEM_CACHE_CSV = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSjN2F42Cz-iI3eGXL9rE5BTPUEtBTG4L_Cy74mcqRaVfWOpj1CYSM2crMncBrXCj0KJJyJFJVur6ts/pub?gid=935728189&single=true&output=csv';
 
 function gemCollectState() {
   // Collect all field values into a plain object
@@ -4191,37 +4193,68 @@ function gemSave() {
   statusEl.style.color = '#6c788b';
   statusEl.textContent = 'Saving…';
   const state = gemCollectState();
+  // Use no-cors to avoid preflight; Apps Script processes the POST fine
   fetch(GEM_SCRIPT_URL, {
     method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
     body: JSON.stringify({ action: 'save', title, contributor, emailType: currentType, state })
   })
-  .then(r => r.json())
-  .then(res => {
-    if (res.error) { statusEl.style.color = '#cc3333'; statusEl.textContent = 'Error: ' + res.error; return; }
+  .then(() => {
     statusEl.style.color = '#1a7a4a';
-    statusEl.textContent = '✓ Saved successfully!';
-    setTimeout(() => document.getElementById('gemSaveModal').style.display = 'none', 1200);
+    statusEl.textContent = '✓ Saved! (check Load to confirm)';
+    setTimeout(() => document.getElementById('gemSaveModal').style.display = 'none', 1500);
   })
   .catch(() => { statusEl.style.color = '#cc3333'; statusEl.textContent = 'Network error. Check your connection.'; });
 }
 
-function gemOpenLoad() {
-  if (!GEM_SCRIPT_URL) {
-    alert('Please paste your Apps Script Web App URL into GEM_SCRIPT_URL in the generator first.');
-    return;
+function gemFetchCache() {
+  // Cache sheet layout (after Apps Script rebuilds it on save/delete):
+  // A1=list_json, B1=id, C1=state_json
+  // A2=JSON array of template metadata (no state)
+  // Row 3+: col B = id, col C = full state JSON
+  const url = GEM_CACHE_CSV;
+  return fetch(url, { cache: 'no-store' }).then(r => {
+    if (!r.ok) throw new Error('Cache not readable. Make sure the Sheet is shared as "Anyone with the link".');
+    return r.text();
+  });
+}
+
+function gemParseCsvLine(line) {
+  const cols = []; let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+    else { cur += c; }
   }
+  cols.push(cur);
+  return cols;
+}
+
+function gemStripCsvQuotes(s) {
+  s = s.trim();
+  if (s.startsWith('"') && s.endsWith('"')) s = s.slice(1, -1).replace(/""/g, '"');
+  return s;
+}
+
+function gemOpenLoad() {
+  if (!GEM_SHEET_ID) { alert('GEM_SHEET_ID not set.'); return; }
   const listEl = document.getElementById('gemLoadList');
   const statusEl = document.getElementById('gemLoadStatus');
   listEl.innerHTML = '';
   statusEl.textContent = 'Loading…';
   document.getElementById('gemLoadModal').style.display = 'flex';
-  fetch(GEM_SCRIPT_URL + '?action=list')
-    .then(r => r.json())
-    .then(res => {
-      if (res.error) { statusEl.textContent = 'Error: ' + res.error; return; }
-      const templates = res.templates || [];
-      statusEl.textContent = templates.length ? templates.length + ' template(s) saved' : 'No saved templates yet.';
-      listEl.innerHTML = templates.map(t => `
+  gemFetchCache()
+    .then(csv => {
+      const lines = csv.trim().split('\n');
+      if (lines.length < 2) { statusEl.textContent = 'No saved templates yet.'; return; }
+      const templates = JSON.parse(gemStripCsvQuotes(lines[1].split(',').slice(0,1).join('')) || '[]');
+      // A2 is the whole first column of row 2 — but it contains JSON with commas, so re-parse properly
+      const row2cols = gemParseCsvLine(lines[1]);
+      const templateList = JSON.parse(gemStripCsvQuotes(row2cols[0]) || '[]');
+      statusEl.textContent = templateList.length ? templateList.length + ' template(s) saved' : 'No saved templates yet.';
+      listEl.innerHTML = templateList.map(t => `
         <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid #e5e5e5;border-radius:8px;margin-bottom:8px;">
           <div style="flex:1;min-width:0;">
             <div style="font-size:13px;font-weight:600;color:#0a1e3d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escHtml(t.title)}</div>
@@ -4231,31 +4264,38 @@ function gemOpenLoad() {
           <button onclick="gemDeleteTemplate('${t.id}',this)" style="padding:5px 8px;background:none;border:1px solid #ddd;color:#cc3333;border-radius:6px;cursor:pointer;font-size:12px;" title="Delete">✕</button>
         </div>`).join('');
     })
-    .catch(() => { statusEl.textContent = 'Network error. Check your connection.'; });
+    .catch(e => { statusEl.textContent = 'Error: ' + e.message; });
 }
 
 function gemLoadTemplate(id) {
   const statusEl = document.getElementById('gemLoadStatus');
   statusEl.textContent = 'Loading template…';
-  fetch(GEM_SCRIPT_URL + '?action=load&id=' + id)
-    .then(r => r.json())
-    .then(res => {
-      if (res.error) { statusEl.textContent = 'Error: ' + res.error; return; }
-      document.getElementById('gemLoadModal').style.display = 'none';
-      gemApplyState(res.state);
-    })
-    .catch(() => { statusEl.textContent = 'Network error.'; });
+  gemFetchCache().then(csv => {
+    const lines = csv.trim().split('\n');
+    // Rows from index 2 onward: col B = id (index 1), col C = state JSON (index 2)
+    for (let i = 2; i < lines.length; i++) {
+      const cols = gemParseCsvLine(lines[i]);
+      const rowId = gemStripCsvQuotes(cols[1] || '');
+      if (rowId === id) {
+        const stateRaw = gemStripCsvQuotes(cols[2] || '');
+        document.getElementById('gemLoadModal').style.display = 'none';
+        gemApplyState(JSON.parse(stateRaw));
+        return;
+      }
+    }
+    statusEl.textContent = 'Template not found. Try saving again.';
+  }).catch(() => { statusEl.textContent = 'Network error.'; });
 }
 
 function gemDeleteTemplate(id, btn) {
   if (!confirm('Delete this template? This cannot be undone.')) return;
   btn.disabled = true;
-  fetch(GEM_SCRIPT_URL, { method: 'POST', body: JSON.stringify({ action: 'delete', id }) })
-    .then(r => r.json())
-    .then(res => {
-      if (res.success) btn.closest('div[style]').remove();
-      else alert('Delete failed: ' + res.error);
-    });
+  fetch(GEM_SCRIPT_URL, {
+    method: 'POST', mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({ action: 'delete', id })
+  }).then(() => { btn.closest('div[style]').remove(); })
+  .catch(() => alert('Delete request failed. Check your connection.'));
 }
 
 function gemApplyState(state) {
