@@ -985,6 +985,12 @@
     <span class="topnav-badge">GEM Desk</span>
   </div>
   <div class="topnav-right">
+    <select id="langSelect" onchange="setLanguage(this.value)" title="Email Language" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:12px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;outline:none;height:30px;">
+      <option value="en" style="background:#0e1f3d;color:#fff;">🌐 EN</option>
+      <option value="th" style="background:#0e1f3d;color:#fff;">🇹🇭 TH</option>
+      <option value="vi" style="background:#0e1f3d;color:#fff;">🇻🇳 VI</option>
+      <option value="zh" style="background:#0e1f3d;color:#fff;">🇨🇳 ZH</option>
+    </select>
     <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
     <button onclick="gemOpenLoad()" style="background:none;border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;">📂 Load</button>
     <button onclick="gemOpenSave()" style="background:#1f71e8;border:none;color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;">💾 Save</button>
@@ -1119,6 +1125,23 @@
           <div class="type-icon">🔴</div>
           <div class="type-name">Webinar Reminder (Live)</div>
         </div>
+        <!-- Promotions -->
+        <div class="type-card" data-type="cashback-promotion" onclick="setType(this)">
+          <div class="type-icon">💸</div>
+          <div class="type-name">Cashback Promotion</div>
+        </div>
+        <div class="type-card" data-type="copy-trading" onclick="setType(this)">
+          <div class="type-icon">📡</div>
+          <div class="type-name">Copy Trading</div>
+        </div>
+        <div class="type-card" data-type="swap-free" onclick="setType(this)">
+          <div class="type-icon">🔄</div>
+          <div class="type-name">Swap-Free Program</div>
+        </div>
+        <div class="type-card" data-type="rewards-promotions" onclick="setType(this)">
+          <div class="type-icon">🎁</div>
+          <div class="type-name">Rewards + Promotions</div>
+        </div>
         <!-- Custom -->
         <div class="type-card" data-type="custom" onclick="setType(this)">
           <div class="type-icon">✏️</div>
@@ -1186,6 +1209,22 @@
             <button class="fmt-btn" onclick="fmt('bold')" title="Bold"><b>B</b></button>
             <button class="fmt-btn" onclick="fmt('italic')" title="Italic"><i>I</i></button>
             <button class="fmt-btn" onclick="fmt('underline')" title="Underline"><u>U</u></button>
+            <button class="fmt-btn" onclick="fmtAlign('contentArea','left')" title="Align Left">⬛L</button>
+            <button class="fmt-btn" onclick="fmtAlign('contentArea','center')" title="Align Center">⬛C</button>
+            <button class="fmt-btn" onclick="fmtAlign('contentArea','right')" title="Align Right">⬛R</button>
+            <select class="fmt-btn" onchange="fmtFontSize('contentArea',this.value);this.value=''" title="Font Size" style="font-size:11px;padding:0 2px;min-width:60px;">
+              <option value="">Size</option>
+              <option value="12px">12px</option>
+              <option value="13px">13px</option>
+              <option value="14px">14px</option>
+              <option value="16px">16px</option>
+              <option value="18px">18px</option>
+              <option value="20px">20px</option>
+              <option value="22px">22px</option>
+              <option value="24px">24px</option>
+              <option value="28px">28px</option>
+              <option value="32px">32px</option>
+            </select>
             <button class="fmt-btn fmt-btn-wide" onclick="openLinkModal()" title="Hyperlink">🔗 Link</button>
             <button class="fmt-btn fmt-btn-wide" onclick="fmt('insertUnorderedList')" title="Bullet list">• List</button>
             <button class="fmt-btn fmt-btn-wide" onclick="clearContent()" title="Clear">✕ Clear</button>
@@ -1651,6 +1690,70 @@ const typeConfig = {
     showTable: false,
     tables: [],
   },
+  'cashback-promotion': {
+    subjects: [
+      'Trade and Earn Up to USD 3,000 Cashback with KVB',
+      'Exclusive Cashback Offer — Register Now to Claim Your Reward',
+    ],
+    bodySuggestions: [
+      "Haven't traded in a while? We welcome you back with an Exclusive Cashback designed just for you.",
+      'Simply deposit the required amount and trade to unlock your Cashback reward.',
+      'Join the campaign via the program website, make a qualifying deposit, and accumulate qualifying trading volume to receive tiered Cashback.',
+    ],
+    defaultContent: `<p>Dear Customer,</p><p>Haven't traded in a while? We welcome you back with an <strong>Exclusive Cashback</strong> designed just for you.</p><p>Simply deposit the required amount and trade to unlock your Cashback reward.</p>`,
+    showTable: false,
+    tables: [],
+    isPromotion: true,
+    promoPreset: 'cashback',
+  },
+  'copy-trading': {
+    subjects: [
+      'Follow Proven Strategies with KVB Copy Trading',
+      'Copy Trades from Experts — or Earn by Sharing Your Signals',
+    ],
+    bodySuggestions: [
+      'KVB Copy Trading lets you follow the strategies of experienced traders automatically, or earn income by sharing your own signals.',
+      'Copy trades from experts in one click. Pay fees only when your account profits. Start investing with just $100.',
+      'Earn additional income by sharing your trading signals. Receive up to 50% profit share. Sync trade orders with Copy Traders in real time.',
+    ],
+    defaultContent: `<p>Dear Customer,</p><p>Discover a smarter way to trade with <strong>KVB Copy Trading</strong> — automatically follow the strategies of experienced traders, or earn by sharing your own signals.</p><p>Whether you're new to trading or an experienced signal provider, KVB Copy Trading gives you the tools to grow.</p><p>The platform has a wide range of Signal Providers. KVB uses advanced algorithms to match you with Signal Providers with outstanding performance.</p>`,
+    showTable: false,
+    tables: [],
+    isPromotion: true,
+    promoPreset: 'copytrading',
+  },
+  'swap-free': {
+    subjects: [
+      'Join the KVB Swap-Free Program — 0 Swap for Your First 7 Days',
+      'Hold Overnight Positions with Zero Swap — 14 Instruments Available',
+    ],
+    bodySuggestions: [
+      'Many traders face this situation: direction is right, price moves as expected, but nightly swap fees increase the cost of holding the position until you\'re forced to close early.',
+      'The KVB Swap-Free Program reduces overnight holding costs so you can swing trade more comfortably.',
+      'In the first 7 days, overnight positions on all eligible instruments incur no swap. From Day 8, the system calculates trading activities every 7 days — if ≥ 25%, you receive 0 Swap for the next 7 days.',
+    ],
+    defaultContent: `<p>Dear Customer,</p><p>Many traders face this situation: direction is right, price moves as expected, but nightly swap fees increase the cost of holding the position — until you're forced to close early.</p><p>The <strong>KVB Swap-Free Program</strong> reduces overnight holding costs so you can swing trade more comfortably.</p><p>After joining this program, your account swap will change from Regular Swap to Promo Swap.</p>`,
+    showTable: false,
+    tables: [],
+    isPromotion: true,
+    promoPreset: 'swapfree',
+  },
+  'rewards-promotions': {
+    subjects: [
+      'Your Welcome Back Mystery Box Is Waiting — Open It Now',
+      'Log In for 1 Free Mystery Box and Reveal Your Reward',
+    ],
+    bodySuggestions: [
+      'Your account is eligible for this Welcome Back Mystery Box campaign. Log in to the campaign page for 1 free mystery box opening and reveal your reward.',
+      'Complete the tasks, then return to the campaign page and click "Claim Reward".',
+      'Your welcome-back mystery box is waiting. Log in now to discover your reward.',
+    ],
+    defaultContent: `<p>Dear Customer,</p><p>Welcome back to KVB! Your account is eligible for this <strong>Welcome Back Mystery Box</strong> campaign.</p><p>Log in to the campaign page for 1 free mystery box opening and reveal your reward.</p>`,
+    showTable: false,
+    tables: [],
+    isPromotion: true,
+    promoPreset: 'rewards',
+  },
 };
 
 // ─────────────────────────────────────────────────────────
@@ -1731,6 +1834,7 @@ function setTypeConfig(type) {
   // Show/hide WMI panel vs standard body/table
   const isWMI = !!cfg.isWMI;
   const isWebinar = !!cfg.isWebinar;
+  const isPromotion = !!cfg.isPromotion;
   const isSpecial = isWMI || isWebinar;
 
   document.getElementById('wmiPanel').classList.toggle('visible', isWMI);
@@ -1978,6 +2082,16 @@ function setTypeConfig(type) {
     }
   }
 
+  // ── Promotion presets: auto-inject dynamic sections ──
+  {
+    // Remove any previously auto-injected promo sections when switching away
+    const draggableP0 = document.getElementById('draggableSections');
+    draggableP0.querySelectorAll('[data-promo-auto]').forEach(el => el.remove());
+  }
+  if (isPromotion && cfg.promoPreset) {
+    promoDefaultSections(cfg.promoPreset);
+  }
+
   // ── Trading Hours: auto-inject post-table body + disclaimer ──
   {
     // Remove auto-injected trading-hours sections when switching away
@@ -2024,6 +2138,481 @@ function setTypeConfig(type) {
   }
 
   updatePreview();
+}
+
+// ─────────────────────────────────────────────────────────
+//  PROMO DEFAULT SECTIONS — inject panels when promo type selected
+// ─────────────────────────────────────────────────────────
+function promoDefaultSections(preset) {
+  const draggable = document.getElementById('draggableSections');
+  const t = Date.now;
+
+  // Helper: shared drag handle with remove button + promo-auto marker
+  function promoHandle(label) {
+    return `<div class="drag-handle" title="Drag to reorder"><svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect y="0" width="16" height="2" rx="1"/><rect y="4" width="16" height="2" rx="1"/><rect y="8" width="16" height="2" rx="1"/></svg><span style="flex:1;">${label}</span><button draggable="false" onclick="event.stopPropagation();this.closest('.panel-section-draggable').remove();updatePreview();" title="Remove section" style="background:none;border:none;cursor:pointer;color:var(--kvb-muted);font-size:15px;padding:0 6px;line-height:1;flex-shrink:0;" onmouseover="this.style.color='#cc3333'" onmouseout="this.style.color='var(--kvb-muted)'">×</button></div>`;
+  }
+
+  // Helper: make a base draggable section element
+  function makePromoSection(sectionId, uid) {
+    const el = document.createElement('div');
+    el.className = 'panel-section panel-section-draggable';
+    el.dataset.sectionId = sectionId;
+    el.dataset.uid = uid;
+    el.setAttribute('data-promo-auto', '1');
+    return el;
+  }
+
+  // Helper: append an eyebrow-text section
+  function addEyebrow(text, style, align) {
+    const uid = 'eyebrow_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('eyebrow-text', uid);
+    sec.innerHTML = promoHandle('📣 Eyebrow Text') + `<div style="padding:12px 18px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Alignment:</label>
+        <button class="fmt-btn" onclick="document.getElementById('${uid}_align').value='left';updatePreview();">⬛L</button>
+        <button class="fmt-btn" onclick="document.getElementById('${uid}_align').value='center';updatePreview();">⬛C</button>
+        <button class="fmt-btn" onclick="document.getElementById('${uid}_align').value='right';updatePreview();">⬛R</button>
+        <input type="hidden" id="${uid}_align" value="${align||'center'}">
+        <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-left:8px;">Style:</label>
+        <label style="font-size:11px;cursor:pointer;"><input type="radio" name="${uid}_style" value="text" ${style==='text'?'checked':''} onchange="updatePreview()"> Text</label>
+        <label style="font-size:11px;cursor:pointer;"><input type="radio" name="${uid}_style" value="pill" ${style==='pill'?'checked':''} onchange="updatePreview()"> Pill/Button</label>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <button class="fmt-btn" onclick="fmtEyebrow('${uid}','bold')" title="Bold"><b>B</b></button>
+        <button class="fmt-btn" onclick="fmtEyebrow('${uid}','italic')" title="Italic"><i>I</i></button>
+        <button class="fmt-btn" onclick="fmtEyebrow('${uid}','underline')" title="Underline"><u>U</u></button>
+      </div>
+      <input type="text" id="${uid}_text" value="${text||''}" placeholder="e.g. KVB EXCLUSIVE CASHBACK" oninput="updatePreview()" style="font-size:13px;width:100%;box-sizing:border-box;">
+      <div class="hint-text" style="margin-top:4px;">Small label / eyebrow text rendered above a headline.</div>
+    </div>`;
+    draggable.appendChild(sec);
+  }
+
+  // Helper: append a title-only section
+  function addTitle(html) {
+    const uid = 'title_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('title-only', uid);
+    sec.innerHTML = promoHandle('🔤 Title') + `<div style="padding:12px 18px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+        <button class="fmt-btn" onclick="fmt2('bold','${uid}_content')" title="Bold"><b>B</b></button>
+        <button class="fmt-btn" onclick="fmt2('italic','${uid}_content')" title="Italic"><i>I</i></button>
+        <button class="fmt-btn" onclick="fmt2('underline','${uid}_content')" title="Underline"><u>U</u></button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}_content','left')" title="Left">⬛L</button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}_content','center')" title="Center">⬛C</button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}_content','right')" title="Right">⬛R</button>
+        <select class="fmt-btn" onchange="fmtFontSize('${uid}_content',this.value);this.value=''" style="font-size:11px;padding:0 2px;min-width:60px;">
+          <option value="">Size</option>
+          <option value="16px">16px</option><option value="18px">18px</option>
+          <option value="20px">20px</option><option value="22px">22px</option>
+          <option value="24px">24px</option><option value="28px">28px</option><option value="32px">32px</option>
+        </select>
+      </div>
+      <div class="content-area" id="${uid}_content" contenteditable="true" oninput="updatePreview()" style="min-height:40px;font-size:18px;font-weight:700;">${html||''}</div>
+      <div class="hint-text" style="margin-top:4px;">Section title / heading only.</div>
+    </div>`;
+    draggable.appendChild(sec);
+  }
+
+  // Helper: append a body-text section
+  function addBody(html, hint, label) {
+    const uid = 'body_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('body', uid);
+    const hasTable = html && html.indexOf('<table') !== -1;
+    const tableStylePicker = hasTable ? `
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Table style:</label>
+        <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_tblstyle" value="classic" checked onchange="applyBodyTableStyle('${uid}')"> Classic</label>
+        <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_tblstyle" value="light" onchange="applyBodyTableStyle('${uid}')"> Light</label>
+        <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_tblstyle" value="striped" onchange="applyBodyTableStyle('${uid}')"> Striped</label>
+        <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_tblstyle" value="minimal" onchange="applyBodyTableStyle('${uid}')"> Minimal</label>
+      </div>` : '';
+    sec.innerHTML = promoHandle(label || '📝 Body Text') + `<div style="padding:16px 18px 16px;">
+      <div class="format-toolbar">
+        <button class="fmt-btn" onclick="fmt2('bold','${uid}')" title="Bold"><b>B</b></button>
+        <button class="fmt-btn" onclick="fmt2('italic','${uid}')" title="Italic"><i>I</i></button>
+        <button class="fmt-btn" onclick="fmt2('underline','${uid}')" title="Underline"><u>U</u></button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}','left')" title="Align Left">⬛L</button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}','center')" title="Align Center">⬛C</button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}','right')" title="Align Right">⬛R</button>
+        <select class="fmt-btn" onchange="fmtFontSize('${uid}',this.value);this.value=''" title="Font Size" style="font-size:11px;padding:0 2px;min-width:60px;">
+          <option value="">Size</option>
+          <option value="12px">12px</option>
+          <option value="13px">13px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="24px">24px</option>
+          <option value="28px">28px</option>
+        </select>
+        <button class="fmt-btn" onclick="fmtLink2('${uid}')" title="Link">🔗</button>
+        <button class="fmt-btn" onclick="fmtList2('${uid}')" title="Bullet List">≡</button>
+        <button class="fmt-btn" onclick="fmtClear2('${uid}')" title="Clear">✕</button>
+      </div>
+      ${tableStylePicker}
+      <div class="content-area" id="${uid}" contenteditable="true" oninput="updatePreview()" style="min-height:80px;">${html||''}</div>
+      <div class="hint-text">${hint||'Additional body content block.'}</div>
+    </div>`;
+    // Store original table HTML for style re-application
+    if (hasTable) sec.dataset.origTableHtml = html;
+    draggable.appendChild(sec);
+  }
+
+  // Helper: append a stat-row section
+  function addStatRow(stats) {
+    const uid = 'statrow_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('stat-row', uid);
+    const statsJson = JSON.stringify(stats).replace(/"/g,'&quot;');
+    sec.innerHTML = promoHandle('📊 Stat Row') + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Stat row colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" checked onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="dark" onchange="updatePreview()"> <span style="font-size:11px;">Dark</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="minimal" onchange="updatePreview()"> <span style="font-size:11px;">Minimal</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">3-column stat row — tick "highlight" on the accent column</div>
+      <div id="${uid}_stats"></div>
+      <button class="btn-add-wmi" onclick="statRowAdd('${uid}')" style="margin-top:6px;">+ Add Stat</button>
+    </div>`;
+    sec.dataset.statsData = statsJson;
+    draggable.appendChild(sec);
+    setTimeout(() => statRowRender(uid), 30);
+  }
+
+  // Helper: append an icon-steps section
+  function addIconSteps(steps) {
+    const uid = 'iconsteps_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('icon-steps', uid);
+    const stepsJson = JSON.stringify(steps).replace(/"/g,'&quot;');
+    sec.innerHTML = promoHandle('🔢 Icon Steps') + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Icon steps colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="dark" checked onchange="updatePreview()"> <span style="font-size:11px;">Dark</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">Numbered icon steps — 01/02/03 dark circle + title + subtitle</div>
+      <div id="${uid}_isteps"></div>
+      <button class="btn-add-wmi" onclick="iconStepsAdd('${uid}')" style="margin-top:6px;">+ Add Step</button>
+    </div>`;
+    sec.dataset.istepsData = stepsJson;
+    draggable.appendChild(sec);
+    setTimeout(() => iconStepsRender(uid), 30);
+  }
+
+  // Helper: append a numbered-steps section
+  function addNumberedSteps(steps) {
+    const uid = 'numsteps_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('numbered-steps', uid);
+    const stepsJson = JSON.stringify(steps).replace(/"/g,'&quot;');
+    sec.innerHTML = promoHandle('📋 Numbered Steps') + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Numbered steps colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" checked onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="minimal" onchange="updatePreview()"> <span style="font-size:11px;">Minimal</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">Numbered steps with circle numbers + optional emoji</div>
+      <div id="${uid}_steps"></div>
+      <button class="btn-add-wmi" onclick="numStepsAdd('${uid}')" style="margin-top:6px;">+ Add Step</button>
+    </div>`;
+    sec.dataset.stepsData = stepsJson;
+    draggable.appendChild(sec);
+    setTimeout(() => numStepsRender(uid), 30);
+  }
+
+  // Helper: append a task-cards section
+  function addTaskCards(tasks) {
+    const uid = 'taskcards_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('task-cards', uid);
+    const tasksJson = JSON.stringify(tasks).replace(/"/g,'&quot;');
+    sec.innerHTML = promoHandle('🃏 Task Cards') + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Task card colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" checked onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="dark" onchange="updatePreview()"> <span style="font-size:11px;">Dark</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="minimal" onchange="updatePreview()"> <span style="font-size:11px;">Minimal</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">Task cards — TASK label, amount, description</div>
+      <div id="${uid}_tasks"></div>
+      <button class="btn-add-wmi" onclick="taskCardsAdd('${uid}')" style="margin-top:6px;">+ Add Task</button>
+    </div>`;
+    sec.dataset.tasksData = tasksJson;
+    draggable.appendChild(sec);
+    setTimeout(() => taskCardsRender(uid), 30);
+  }
+
+  // Helper: append a CTA-disclaimer section
+  function addCtaDisclaimer(text, boxed) {
+    const uid = 'ctadisc_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('cta-disclaimer', uid);
+    sec.innerHTML = promoHandle('⚠️ CTA Disclaimer') + `<div style="padding:12px 18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Style:</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;">
+          <input type="radio" name="${uid}_boxstyle" value="plain" ${!boxed?'checked':''} onchange="updatePreview()"> Plain text
+        </label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;">
+          <input type="radio" name="${uid}_boxstyle" value="box" ${boxed?'checked':''} onchange="updatePreview()"> With callout box
+        </label>
+      </div>
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);display:block;margin-bottom:4px;">Disclaimer / fine-print text</label>
+      <textarea id="${uid}_text" rows="2" style="width:100%;font-size:12px;resize:vertical;" oninput="updatePreview()">${text||''}</textarea>
+      <div class="hint-text" style="margin-top:4px;">Plain: small gray italic text. Box: blue left-border callout.</div>
+    </div>`;
+    draggable.appendChild(sec);
+  }
+
+  // Helper: set the main CTA (static section at bottom) AND add a promo-cta draggable section
+  function setCTA(label, url) {
+    const ctaToggle = document.getElementById('ctaToggle');
+    const ctaFields = document.getElementById('ctaFields');
+    const ctaLabel = document.getElementById('ctaLabel');
+    const ctaUrl = document.getElementById('ctaUrl');
+    if (ctaToggle) { ctaToggle.checked = true; if (ctaFields) ctaFields.classList.add('visible'); }
+    if (ctaLabel) { ctaLabel.value = label; updateCtaPreview(); }
+    if (ctaUrl) ctaUrl.value = url;
+    // Also add a visible CTA button section into the draggable flow for promo emails
+    const uid = 'cta_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    const sec = makePromoSection('promo-cta', uid);
+    sec.dataset.ctaLabel = label;
+    sec.dataset.ctaUrl = url;
+    sec.innerHTML = promoHandle('🔗 CTA Button') + `<div style="padding:12px 18px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+        <div style="flex:1;"><label style="font-size:11px;font-weight:600;color:var(--kvb-muted);display:block;margin-bottom:4px;">Button Label</label>
+          <input type="text" id="${uid}_label" value="${label.replace(/"/g,'&quot;')}" oninput="updatePreview()" style="width:100%;font-size:13px;box-sizing:border-box;"></div>
+        <div style="flex:2;"><label style="font-size:11px;font-weight:600;color:var(--kvb-muted);display:block;margin-bottom:4px;">Button URL</label>
+          <input type="text" id="${uid}_url" value="${url.replace(/"/g,'&quot;')}" oninput="updatePreview()" style="width:100%;font-size:13px;box-sizing:border-box;"></div>
+      </div>
+    </div>`;
+    draggable.appendChild(sec);
+  }
+
+  // Helper: set the main Banner URL (static section)
+  // Per design decision: do NOT auto-fill banner image URL (leave blank for user to set)
+  function setBanner(imgUrl, linkUrl) {
+    // Banner image URL intentionally left blank — user fills their own
+    // Only set link URL
+    const bannerLinkEl = document.getElementById('bannerLinkUrl');
+    if (bannerLinkEl) bannerLinkEl.value = linkUrl || '';
+  }
+
+  // ── CASHBACK PROMOTION ──────────────────────────────────
+  if (preset === 'cashback') {
+    setBanner(
+      'https://static.mykvb.com/crm/202609/399c14a77d59c7fd003aa7732eec0ba947c1923d.png?sign=1A249EA5F9E3FF3BFC4F7A583EF61303F860CA17',
+      'https://mykvb.com/reward/promotions/73'
+    );
+
+    addBody('<p style="margin:0 0 10px 0;font-size:14px;line-height:1.7;color:#0F172A;">Dear Customer,</p><p style="margin:0;font-size:13px;line-height:1.8;color:#4a5568;">Trade and earn up to <strong>$3,000 Cashback</strong> — exclusively designed for you.</p>', 'Opening greeting and intro paragraph.', '📝 Intro Text');
+
+    // Campaign badge + headline
+    (function() {
+      const uid = 'campaign-hero_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('campaign-hero', uid);
+      sec.dataset.uid = uid;
+      sec.innerHTML = promoHandle('🏷️ Campaign Badge & Headline') + buildCampaignHeroPanel(uid);
+      draggable.appendChild(sec);
+      setTimeout(() => {
+        const b = document.getElementById(uid+'_badge'); if(b) b.value='KVB EXCLUSIVE CASHBACK';
+        const h = document.getElementById(uid+'_headline'); if(h) h.value='Trade & Earn up to USD 3,000 Cashback';
+        const s = document.getElementById(uid+'_subtitle'); if(s) s.value='Deposit and trade to unlock your cashback reward.';
+        updatePreview();
+      }, 50);
+    })();
+
+    addStatRow([
+      {value:'20%',  label:'Cashback on qualifying deposit amount', highlight:false},
+      {value:'+5%',  label:'Special privilege for USDT deposits',   highlight:false},
+      {value:'25%',  label:'Maximum total cashback credit',         highlight:true},
+    ]);
+
+    addNumberedSteps([
+      {title:'Register for the Campaign', desc:'Log in to your KVB account and join the cashback campaign.'},
+      {title:'Deposit Funds', desc:'Make a qualifying deposit to be eligible for cashback rewards.'},
+      {title:'Trade & Earn', desc:'Complete your trades to unlock your cashback. Rewards are credited automatically.'},
+    ]);
+
+    setCTA('Get Cashback Now', 'https://mykvb.com/reward/promotions/73');
+    addCtaDisclaimer('*Terms & Conditions apply. Cashback is subject to qualifying deposit and trading volume requirements.');
+  }
+
+  // ── COPY TRADING ───────────────────────────────────────
+  else if (preset === 'copytrading') {
+    setBanner(
+      'https://static.mykvb.com/crm/202609/4b9788b3d5cd9a8f02ec36ff12cbd4104f5bfcb9.png?sign=6526251B7B278B226B95D30A613E9F3C69725F0D',
+      'https://mykvb.com/ctrade'
+    );
+
+    addBody('<p style="margin:0 0 14px 0;font-size:13px;line-height:1.8;color:#4a5568;">You don\'t have to trade alone. Discover KVB Copy Trading — the smarter way to manage and grow your account, whether you follow experts or share your own strategies.</p><p style="margin:0 0 14px 0;font-size:13px;line-height:1.8;color:#4a5568;">Copy Trading is an all-in-one platform that syncs trades across MetaTrader servers in real time — open and close orders, just like manual trading.</p><p style="margin:0;font-size:13px;line-height:1.8;color:#4a5568;">Users can join in two roles: <strong>Signal Provider</strong> or <strong>Copy Trader</strong>.</p>', 'Opening intro — 3 paragraphs about Copy Trading platform.', '📝 Intro Text');
+
+    // Role Comparison Cards
+    (function() {
+      const uid = 'role-cards_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('role-cards', uid);
+      const initialCards = [
+        { title: 'Copy Trader', bullets: ['Copy trades from expert Signal Providers in one click', 'Pay fees only when your account is profitable', 'Start investing with as little as $100'] },
+        { title: 'Signal Provider', bullets: ['Earn additional income by sharing your trading signals', 'Receive up to 50% profit share', 'Sync your orders with Copy Traders in real time'] }
+      ];
+      sec.dataset.uid = uid;
+      sec.dataset.cardsData = JSON.stringify(initialCards);
+      sec.innerHTML = promoHandle('🃏 Role Comparison Cards') + buildRoleCardsPanel(uid, '🃏 Role Comparison Cards', initialCards);
+      draggable.appendChild(sec);
+      setTimeout(() => {
+        roleCardsRender(uid);
+        const sub = document.getElementById(uid+'_subtitle');
+        if(sub) sub.value = 'Copy proven strategies or earn from your own signals';
+        updatePreview();
+      }, 50);
+    })();
+
+    // Trust Callout
+    (function() {
+      const uid = 'callout-box_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('callout-box', uid);
+      sec.dataset.uid = uid;
+      sec.innerHTML = promoHandle('💡 Trust Callout') + buildCalloutBoxPanel(uid);
+      draggable.appendChild(sec);
+      setTimeout(() => {
+        const t = document.getElementById(uid+'_text');
+        if(t) t.value = 'The platform hosts a variety of Signal Providers. KVB uses advanced algorithms to match you with providers who have outstanding performance records.';
+        const styleRadio = sec.querySelector('input[name="'+uid+'_callstyle"][value="info"]');
+        if(styleRadio) styleRadio.checked = true;
+        updatePreview();
+      }, 50);
+    })();
+
+    setCTA('Explore KVB Copy Trading', 'https://mykvb.com/ctrade');
+    addCtaDisclaimer('*Past performance is not indicative of future results. We recommend Copy Traders research and understand the associated risks before investing.');
+  }
+
+  // ── SWAP-FREE PROGRAM ───────────────────────────────────
+  else if (preset === 'swapfree') {
+    setBanner(
+      'https://static.mykvb.com/crm/202609/9ba2be21de73b68d5be7f8f8bfd76fe07820d0d2.png?sign=41C6C0D6B21FA296FC3C3BD058B40D85BBD05418',
+      'https://mykvb.com/reward/promotions/5'
+    );
+
+    addBody('<p style="margin:0 0 14px 0;font-size:13px;line-height:1.8;color:#4a5568;"><strong>Dear Valued Client,</strong></p><p style="margin:0 0 14px 0;font-size:13px;line-height:1.8;color:#4a5568;">Many traders have faced this situation: you analyse the market correctly, price moves as expected, but overnight swap fees keep eating into your position — forcing you to close early before your target.</p><p style="margin:0;font-size:13px;line-height:1.8;color:#4a5568;"><strong>KVB Swap-free Program</strong> reduces overnight holding costs so you can swing trade with confidence.</p>', 'Opening intro paragraphs.', '📝 Intro Text');
+
+    // Divider between intro and content
+    (function() {
+      const uid = 'divider_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('divider', uid);
+      sec.innerHTML = promoHandle('➖ Divider') + `<div style="padding:12px 18px;"><div style="height:1px;background:var(--kvb-border);border-radius:1px;"></div><div class="hint-text" style="margin-top:6px;">A horizontal divider line will be added in the email.</div></div>`;
+      draggable.appendChild(sec);
+    })();
+
+    // Swap Comparison Table
+    (function() {
+      const uid = 'swap-table_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('swap-table', uid);
+      sec.dataset.uid = uid;
+      sec.innerHTML = promoHandle('📊 Swap Comparison Table') + buildSwapTablePanel(uid);
+      draggable.appendChild(sec);
+      updatePreview();
+    })();
+
+    // Important Callout
+    (function() {
+      const uid = 'callout-box_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('callout-box', uid);
+      sec.dataset.uid = uid;
+      sec.innerHTML = promoHandle('⚠️ Important Callout') + buildCalloutBoxPanel(uid);
+      draggable.appendChild(sec);
+      setTimeout(() => {
+        const t = document.getElementById(uid+'_text');
+        if(t) t.value = 'When your account\'s Trading Activities reach 25% or above, you qualify for 0 Swap in the next 7-day period. If the threshold is not met, swap is charged at the Promo Swap rate.';
+        const alignRadio = sec.querySelector('input[name="'+uid+'_callalign"][value="left"]');
+        if(alignRadio) alignRadio.checked = true;
+        updatePreview();
+      }, 50);
+    })();
+
+    addNumberedSteps([
+      {title:'Join immediately', desc:'In the first 7 days, all overnight positions on eligible instruments incur 0 Swap.'},
+      {title:'From Day 8 onwards', desc:'The system calculates your Trading Activities every 7 days. Reach 25%+ to keep your 0 Swap benefit for the next 7 days.'},
+    ]);
+
+    setCTA('Get 0 Swap Now', 'https://mykvb.com/reward/promotions/5');
+    addCtaDisclaimer('*Swap values shown are for reference only. Actual swap rates may vary.');
+    addBody('<p style="margin:0;font-size:15px;line-height:25px;color:#0E1F3D;">ขอแสดงความนับถือ<br><strong>ทีมงาน KVB</strong></p>', 'Sign-off paragraph.', '✍️ Sign-off');
+  }
+
+  // ── REWARDS + PROMOTIONS (Mystery Box / Welcome Back) ──
+  else if (preset === 'rewards') {
+    setBanner(
+      'https://static.mykvb.com/crm/202609/5d180cf58d6f028e5ba03ad4e61db39b4d516264.png?sign=5C2C079048A4D26E18F92BAB4373BBC2BF3A37E3',
+      'https://mykvb.com/reward/promotions/79'
+    );
+
+    addBody('<p style="margin:0;font-size:15px;line-height:25px;color:#334155;">Welcome back to KVB! Your account is eligible for this Welcome Back Mystery Box campaign. Log in to the campaign page for <strong>1 free mystery box opening</strong> and reveal your reward.</p>', 'Welcome back intro paragraph.', '📝 Intro Text');
+
+    // Divider between intro and content
+    (function() {
+      const uid = 'divider_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('divider', uid);
+      sec.innerHTML = promoHandle('➖ Divider') + `<div style="padding:12px 18px;"><div style="height:1px;background:var(--kvb-border);border-radius:1px;"></div><div class="hint-text" style="margin-top:6px;">A horizontal divider line will be added in the email.</div></div>`;
+      draggable.appendChild(sec);
+    })();
+
+    // Secondary Image
+    (function() {
+      const uid = 'secondary-image_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('secondary-image', uid);
+      sec.dataset.uid = uid;
+      sec.innerHTML = promoHandle('🖼️ Prize / Secondary Image') + buildSecondaryImagePanel(uid);
+      draggable.appendChild(sec);
+      setTimeout(() => {
+        const cap = document.getElementById(uid+'_caption');
+        if(cap) cap.value = 'Your reward is subject to the details shown on the campaign page after you open your box.';
+        updatePreview();
+      }, 50);
+    })();
+
+    addEyebrow('HOW TO CLAIM', 'pill', 'center');
+    addTitle('<p style="font-size:20px;line-height:28px;font-weight:bold;color:#0E1F3D;text-align:center;margin:0;">Claim your welcome-back reward in 3 steps</p>');
+
+    addNumberedSteps([
+      {title:'Join the campaign', desc:'Log in to KVB and participate in the campaign.'},
+      {title:'Open your box', desc:'Choose 1 gift box and reveal your welcome-back reward.'},
+      {title:'Unlock your reward', desc:'Complete the tasks, then return to the campaign page and click "Claim Reward".'},
+    ]);
+
+    addEyebrow('UNLOCK TASKS', 'pill', 'center');
+    addTitle('<p style="font-size:20px;line-height:28px;font-weight:bold;color:#0E1F3D;text-align:center;margin:0;">Complete Both Tasks Within <span style="color:#2962FE;">14 Days</span></p>');
+
+    addTaskCards([
+      {label:'TASK 1 · DEPOSIT', amount:'Deposit USD 300',  desc:'Make a single qualifying deposit of at least USD 300. Multiple deposits cannot be combined.'},
+      {label:'TASK 2 · TRADE',   amount:'Trade 0.6 lots', desc:'Complete a total qualifying trading volume of at least 0.6 lot. Each counted trade must be held for at least 180 seconds.'},
+    ]);
+
+    // Closing Callout
+    (function() {
+      const uid = 'callout-box_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+      const sec = makePromoSection('callout-box', uid);
+      sec.dataset.uid = uid;
+      sec.innerHTML = promoHandle('💬 Closing Callout') + buildCalloutBoxPanel(uid);
+      draggable.appendChild(sec);
+      setTimeout(() => {
+        const t = document.getElementById(uid+'_text');
+        if(t) t.value = 'Your welcome-back mystery box is waiting.\nLog in now to discover your reward.';
+        const alignRadio = sec.querySelector('input[name="'+uid+'_callalign"][value="center"]');
+        if(alignRadio) alignRadio.checked = true;
+        updatePreview();
+      }, 50);
+    })();
+
+    setCTA('Open My Mystery Box', 'https://mykvb.com/reward/promotions/79');
+    addCtaDisclaimer('*Terms & Conditions apply. Please refer to the campaign page for details.');
+    addBody('<p style="margin:0;font-size:15px;line-height:25px;color:#0E1F3D;">Best regards,<br><strong>KVB Team</strong></p>', 'Sign-off paragraph.', '✍️ Sign-off');
+  }
 }
 
 // ─────────────────────────────────────────────────────────
@@ -3166,6 +3755,314 @@ function generateEmailHTML(forPreview) {
         allSectionsHtml += `\n  <div style="height:${h}px;line-height:${h}px;font-size:1px;">&nbsp;</div>`;
       } else if (sid === 'divider') {
         allSectionsHtml += `\n  <hr style="border:none;border-top:1px solid #e5e5e5;margin:16px 0;">`;
+
+      } else if (sid === 'eyebrow-text') {
+        const uid = sec.dataset.uid;
+        const inp = uid ? document.getElementById(uid + '_text') : null;
+        const txt = inp ? inp.value.trim() : '';
+        if (txt) {
+          const alignEl = uid ? document.getElementById(uid + '_align') : null;
+          const align = alignEl ? alignEl.value : 'center';
+          const styleRadio = uid ? sec.querySelector(`input[name="${uid}_style"]:checked`) : null;
+          const isPill = styleRadio && styleRadio.value === 'pill';
+          const isBold = inp && inp.getAttribute('data-fmt-bold') === '1';
+          const isItalic = inp && inp.getAttribute('data-fmt-italic') === '1';
+          const isUnderline = inp && inp.getAttribute('data-fmt-underline') === '1';
+          let fmtStyle = '';
+          if (isBold) fmtStyle += 'font-weight:700;';
+          if (isItalic) fmtStyle += 'font-style:italic;';
+          if (isUnderline) fmtStyle += 'text-decoration:underline;';
+          if (isPill) {
+            allSectionsHtml += `\n  <div style="text-align:${align};margin:8px 0 16px;">\n    <span style="display:inline-block;padding:4px 14px;background:#2962FE;color:#ffffff;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.06em;${fmtStyle}">${escHtml(txt)}</span>\n  </div>`;
+          } else {
+            allSectionsHtml += `\n  <p style="text-align:${align};font-size:12px;font-weight:700;letter-spacing:0.06em;color:#2962FE;text-transform:uppercase;margin:8px 0 4px;${fmtStyle}">${escHtml(txt)}</p>`;
+          }
+        }
+
+      } else if (sid === 'title-only') {
+        const uid = sec.dataset.uid;
+        const el = uid ? document.getElementById(uid + '_content') : null;
+        const html = el ? el.innerHTML.trim() : '';
+        if (html && html !== '<br>') {
+          allSectionsHtml += `\n  <div style="font-size:22px;font-weight:700;color:#0a1e3d;margin:20px 0 12px;line-height:1.3;">${html}</div>`;
+        }
+
+      } else if (sid === 'cta-disclaimer') {
+        const uid = sec.dataset.uid;
+        const txtEl = uid ? document.getElementById(uid + '_text') : null;
+        const txt = txtEl ? txtEl.value.trim() : '';
+        if (txt) {
+          const boxRadio = uid ? sec.querySelector(`input[name="${uid}_boxstyle"]:checked`) : null;
+          const isBoxed = boxRadio && boxRadio.value === 'box';
+          if (isBoxed) {
+            allSectionsHtml += `\n  <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin:16px 0;">
+    <tr>
+      <td style="border-left:4px solid #2962FE;padding:12px 16px;background:#EEF2FF;border-radius:0 8px 8px 0;">
+        <p style="margin:0;font-size:13px;color:#0a1e3d;line-height:1.6;">${escHtml(txt).replace(/\n/g,'<br>')}</p>
+      </td>
+    </tr>
+  </table>`;
+          } else {
+            allSectionsHtml += `\n  <p style="font-size:12px;color:#888888;text-align:center;font-style:italic;line-height:1.6;margin-top:12px;">${escHtml(txt).replace(/\n/g,'<br>')}</p>`;
+          }
+        }
+
+      } else if (sid === 'numbered-steps') {
+        const uid = sec.dataset.uid;
+        let steps = [];
+        try { steps = JSON.parse((sec.dataset.stepsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+        if (steps.length > 0) {
+          const nsPalRadio = uid ? sec.querySelector(`input[name="${uid}_palette"]:checked`) : null;
+          const nsPal = nsPalRadio ? nsPalRadio.value : 'blue';
+          const NS_PAL = {
+            blue:    { circleBg:'#2962FE', circleColor:'#ffffff', titleColor:'#0a1e3d', descColor:'#475569' },
+            navy:    { circleBg:'#0e1f3d', circleColor:'#2962FE', titleColor:'#0a1e3d', descColor:'#475569' },
+            green:   { circleBg:'#1a7a4a', circleColor:'#ffffff', titleColor:'#0a1e3d', descColor:'#475569' },
+            minimal: { circleBg:'#f0f2f5', circleColor:'#0a1e3d', titleColor:'#0a1e3d', descColor:'#475569' },
+          };
+          const ns = NS_PAL[nsPal] || NS_PAL.blue;
+          // Card container style matching real templates (background:#F6F8FC, border-radius:12px, row dividers)
+          allSectionsHtml += `\n  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0;background-color:#F6F8FC;border-radius:12px;">`;
+          steps.forEach((s, i) => {
+            const isLast = (i === steps.length - 1);
+            const topPad = i === 0 ? '18px' : '16px';
+            const btmPad = isLast ? '18px' : '16px';
+            const borderBottom = isLast ? '' : 'border-bottom:1px solid #E2E8F0;';
+            const circleContent = s.emoji
+              ? `<span style="font-size:18px;line-height:30px;">${s.emoji}</span>`
+              : `${i+1}`;
+            allSectionsHtml += `
+    <tr>
+      <td align="center" valign="top" style="width:40px;padding:${topPad} 0 ${btmPad} 16px;">
+        <div style="width:30px;height:30px;line-height:30px;border-radius:15px;background-color:${ns.circleBg};color:${ns.circleColor};font-size:14px;font-weight:bold;text-align:center;">${circleContent}</div>
+      </td>
+      <td valign="top" style="padding:${topPad} 16px ${btmPad} 12px;font-size:14px;line-height:22px;color:${ns.descColor};${borderBottom}">
+        <strong style="font-size:15px;color:${ns.titleColor};">${escHtml(s.title||'')}</strong>${s.desc ? '<br>'+escHtml(s.desc) : ''}
+      </td>
+    </tr>`;
+          });
+          allSectionsHtml += `\n  </table>`;
+        }
+
+      } else if (sid === 'task-cards') {
+        const uid = sec.dataset.uid;
+        let tasks = [];
+        try { tasks = JSON.parse((sec.dataset.tasksData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+        if (tasks.length > 0) {
+          const tcPalRadio = uid ? sec.querySelector(`input[name="${uid}_palette"]:checked`) : null;
+          const tcPal = tcPalRadio ? tcPalRadio.value : 'navy';
+          const TC_PAL = {
+            navy:    { cardBg:'#0e1f3d', labelColor:'#2962FE', amtColor:'#ffffff', descColor:'rgba(255,255,255,0.8)', divColor:'rgba(255,255,255,0.15)' },
+            blue:    { cardBg:'#2962FE', labelColor:'#aaccff', amtColor:'#ffffff', descColor:'rgba(255,255,255,0.85)', divColor:'rgba(255,255,255,0.2)' },
+            green:   { cardBg:'#1a7a4a', labelColor:'#a8e6c4', amtColor:'#ffffff', descColor:'rgba(255,255,255,0.85)', divColor:'rgba(255,255,255,0.2)' },
+            dark:    { cardBg:'#222222', labelColor:'#aaaaaa', amtColor:'#f0f0f0', descColor:'rgba(255,255,255,0.65)', divColor:'rgba(255,255,255,0.1)' },
+            minimal: { cardBg:'#f0f2f5', labelColor:'#2962FE', amtColor:'#0a1e3d', descColor:'#555555', divColor:'#e5e5e5' },
+          };
+          const tc = TC_PAL[tcPal] || TC_PAL.navy;
+          allSectionsHtml += `\n  <p style="font-size:13px;font-weight:700;letter-spacing:0.08em;color:#8899b8;text-transform:uppercase;margin:20px 0 8px;">UNLOCK TASKS</p>`;
+          tasks.forEach((t, i) => {
+            allSectionsHtml += `\n  <div style="padding:16px 20px;background:${tc.cardBg};border-radius:8px;margin-bottom:4px;">
+    <p style="margin:0 0 6px;font-size:12px;font-weight:700;letter-spacing:0.06em;color:${tc.labelColor};text-transform:uppercase;">${escHtml(t.label)}</p>
+    <p style="margin:0 0 4px;font-size:24px;font-weight:700;color:${tc.amtColor};">${escHtml(t.amount)}</p>
+    <p style="margin:0;font-size:13px;color:${tc.descColor};line-height:1.5;">${escHtml(t.desc)}</p>
+  </div>`;
+            if (i < tasks.length - 1) allSectionsHtml += `\n  <hr style="border:none;border-top:1px solid ${tc.divColor};margin:0;">`;
+          });
+        }
+
+      } else if (sid === 'stat-row') {
+        const uid = sec.dataset.uid;
+        let stats = [];
+        try { stats = JSON.parse((sec.dataset.statsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+        if (stats.length > 0) {
+          const cols = stats.length;
+          const w = Math.floor(100/cols);
+          // Read the palette selection
+          const palRadio = uid ? sec.querySelector(`input[name="${uid}_palette"]:checked`) : null;
+          const pal = palRadio ? palRadio.value : 'blue';
+          // Palette colour maps — normalBg/normalVal match cashback template (#f4f7fb / #0D47A1)
+          const STAT_PAL = {
+            blue:    { normalBg:'#f4f7fb', normalVal:'#0D47A1', normalLbl:'#64748B', accentBg:'#0D47A1', accentVal:'#FFFFFF', accentLbl:'#DCE7FA' },
+            navy:    { normalBg:'#EEF2FF', normalVal:'#0e1f3d', normalLbl:'#64748B', accentBg:'#0e1f3d', accentVal:'#FFFFFF', accentLbl:'rgba(255,255,255,0.7)' },
+            green:   { normalBg:'#f0faf5', normalVal:'#1a7a4a', normalLbl:'#64748B', accentBg:'#1a7a4a', accentVal:'#FFFFFF', accentLbl:'rgba(255,255,255,0.8)' },
+            dark:    { normalBg:'#f0f2f5', normalVal:'#222222', normalLbl:'#64748B', accentBg:'#222222', accentVal:'#FFFFFF', accentLbl:'rgba(255,255,255,0.75)' },
+            minimal: { normalBg:'#f8f9fa', normalVal:'#374151', normalLbl:'#9CA3AF', accentBg:'#374151', accentVal:'#FFFFFF', accentLbl:'rgba(255,255,255,0.7)' },
+          };
+          const sp = STAT_PAL[pal] || STAT_PAL.blue;
+          allSectionsHtml += `\n  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;"><tr>`;
+          stats.forEach((s, i) => {
+            const isAccent = !!s.highlight;
+            const bg = isAccent ? sp.accentBg : sp.normalBg;
+            const valColor = isAccent ? sp.accentVal : sp.normalVal;
+            const lblColor = isAccent ? sp.accentLbl : sp.normalLbl;
+            const padL = i > 0 ? 'padding-left:6px;' : '';
+            const padR = i < stats.length-1 ? 'padding-right:6px;' : '';
+            allSectionsHtml += `
+      <td width="${w}%" style="${padL}${padR}">
+        <div style="background:${bg};padding:16px 8px;border-radius:8px;text-align:center;box-sizing:border-box;">
+          <div style="font-size:20px;font-weight:800;color:${valColor};">${escHtml(s.value||'')}</div>
+          <div style="font-size:10px;color:${lblColor};margin-top:4px;line-height:1.4;">${escHtml(s.label||'')}</div>
+        </div>
+      </td>`;
+          });
+          allSectionsHtml += `\n  </tr></table>`;
+        }
+
+      } else if (sid === 'icon-steps') {
+        const uid = sec.dataset.uid;
+        let steps = [];
+        try { steps = JSON.parse((sec.dataset.istepsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+        if (steps.length > 0) {
+          const isPalRadio = uid ? sec.querySelector(`input[name="${uid}_palette"]:checked`) : null;
+          const isPal = isPalRadio ? isPalRadio.value : 'dark';
+          const IS_PAL = {
+            dark:  { circleBg:'#0a1e3d', numColor:'#2962FE', titleColor:'#0a1e3d', subColor:'#555555' },
+            blue:  { circleBg:'#2962FE', numColor:'#ffffff', titleColor:'#0a1e3d', subColor:'#555555' },
+            navy:  { circleBg:'#1f3a6b', numColor:'#ffffff', titleColor:'#0a1e3d', subColor:'#555555' },
+            green: { circleBg:'#1a7a4a', numColor:'#ffffff', titleColor:'#0a1e3d', subColor:'#555555' },
+          };
+          const is = IS_PAL[isPal] || IS_PAL.dark;
+          steps.forEach(s => {
+            allSectionsHtml += `\n  <table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;margin-bottom:16px;">
+    <tr>
+      <td style="width:52px;vertical-align:middle;padding-right:16px;">
+        <div style="width:48px;height:48px;border-radius:50%;background:${is.circleBg};text-align:center;line-height:48px;">
+          <span style="font-size:14px;font-weight:900;color:${is.numColor};line-height:1;">${escHtml(s.num)}</span>
+        </div>
+      </td>
+      <td style="vertical-align:middle;">
+        <p style="margin:0 0 4px;font-size:16px;font-weight:700;color:${is.titleColor};">${escHtml(s.title)}</p>
+        <p style="margin:0;font-size:14px;color:${is.subColor};line-height:1.5;">${escHtml(s.sub)}</p>
+      </td>
+    </tr>
+  </table>`;
+          });
+        }
+      } else if (sid === 'role-cards') {
+        const uid = sec.dataset.uid;
+        let cards = [];
+        try { cards = JSON.parse((sec.dataset.cardsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+        const subtitleEl = uid ? document.getElementById(uid+'_subtitle') : null;
+        const subtitle = subtitleEl ? subtitleEl.value.trim() : '';
+        if (subtitle) {
+          allSectionsHtml += `\n  <p style="margin:0 0 16px 0;font-size:13px;line-height:1.7;font-weight:700;color:#0D47A1;text-align:center;">${escHtml(subtitle)}</p>`;
+        }
+        cards.forEach((card, ci) => {
+          allSectionsHtml += `\n  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e6ebf2;border-radius:12px;border-collapse:separate;margin-bottom:${ci < cards.length-1 ? '12px' : '0'};">
+    <tr><td style="padding:20px 18px;">
+      <p style="margin:0 0 14px 0;font-size:16px;font-weight:700;color:#0F172A;">${escHtml(card.title)}</p>`;
+          (card.bullets||[]).forEach(b => {
+            allSectionsHtml += `
+      <p style="margin:0 0 6px 0;font-size:12px;line-height:1.7;color:#334155;"><span style="color:#0D47A1;font-weight:700;">✓</span>&nbsp;${escHtml(b)}</p>`;
+          });
+          allSectionsHtml += `
+    </td></tr>
+  </table>`;
+        });
+      } else if (sid === 'callout-box') {
+        const uid = sec.dataset.uid;
+        const txtEl = uid ? document.getElementById(uid+'_text') : null;
+        const txt = txtEl ? txtEl.value.trim() : '';
+        const styleRadio = uid ? sec.querySelector(`input[name="${uid}_callstyle"]:checked`) : null;
+        const callStyle = styleRadio ? styleRadio.value : 'info';
+        const CALL_STYLES = {
+          info:    { bg:'#f5f8ff', border:'#2f6fed', color:'#0a1e3d' },
+          success: { bg:'#f0faf5', border:'#22835F', color:'#134d35' },
+          warning: { bg:'#fffbeb', border:'#d97706', color:'#7c3f00' },
+          neutral: { bg:'#F2F6FA', border:'#2962FE', color:'#0a1e3d' },
+        };
+        const cs = CALL_STYLES[callStyle] || CALL_STYLES.info;
+        const alignRadio = uid ? sec.querySelector(`input[name="${uid}_callalign"]:checked`) : null;
+        const align = alignRadio && alignRadio.value === 'center' ? 'center' : 'left';
+        if (txt) {
+          allSectionsHtml += `\n  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;margin:12px 0;">
+    <tr><td style="background-color:${cs.bg};border-left:4px solid ${cs.border};padding:14px 16px;font-size:13px;line-height:21px;color:${cs.color};text-align:${align};font-weight:600;">${escHtml(txt).replace(/\n/g,'<br>')}</td></tr>
+  </table>`;
+        }
+      } else if (sid === 'campaign-hero') {
+        const uid = sec.dataset.uid;
+        const badgeEl = uid ? document.getElementById(uid+'_badge') : null;
+        const headlineEl = uid ? document.getElementById(uid+'_headline') : null;
+        const subtitleEl = uid ? document.getElementById(uid+'_subtitle') : null;
+        const badge = badgeEl ? badgeEl.value.trim() : '';
+        const headline = headlineEl ? headlineEl.value.trim() : '';
+        const subtitle = subtitleEl ? subtitleEl.value.trim() : '';
+        if (badge) {
+          allSectionsHtml += `\n  <p style="text-align:center;margin:0 0 12px 0;"><span style="display:inline-block;background:#0D47A1;color:#FFFFFF;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:7px 16px;border-radius:999px;">${escHtml(badge)}</span></p>`;
+        }
+        if (headline) {
+          allSectionsHtml += `\n  <p style="margin:0 0 8px 0;font-size:34px;line-height:1.3;font-weight:800;color:#0D47A1;text-align:center;">${escHtml(headline)}</p>`;
+        }
+        if (subtitle) {
+          allSectionsHtml += `\n  <p style="margin:0;font-size:13px;line-height:1.7;color:#4a5568;text-align:center;">${escHtml(subtitle)}</p>`;
+        }
+      } else if (sid === 'secondary-image') {
+        const uid = sec.dataset.uid;
+        const imgEl = uid ? document.getElementById(uid+'_img') : null;
+        const linkEl = uid ? document.getElementById(uid+'_link') : null;
+        const altEl = uid ? document.getElementById(uid+'_alt') : null;
+        const captionEl = uid ? document.getElementById(uid+'_caption') : null;
+        const img = imgEl ? imgEl.value.trim() : '';
+        const link = linkEl ? linkEl.value.trim() : '';
+        const alt = altEl ? altEl.value.trim() : '';
+        const caption = captionEl ? captionEl.value.trim() : '';
+        if (img) {
+          const imgTag = `<img src="${img}" width="600" alt="${escHtml(alt)}" style="display:block;width:100%;max-width:544px;height:auto;border:0;border-radius:10px;">`;
+          allSectionsHtml += `\n  <p style="text-align:center;margin:0 0 8px 0;">${link ? `<a href="${link}" target="_blank" style="display:block;">${imgTag}</a>` : imgTag}</p>`;
+          if (caption) {
+            allSectionsHtml += `\n  <p style="margin:8px 0 0 0;font-size:13px;line-height:21px;color:#475569;text-align:center;">${escHtml(caption)}</p>`;
+          }
+        }
+      } else if (sid === 'swap-table') {
+        const uid = sec.dataset.uid;
+        const col1HdEl = uid ? document.getElementById(uid+'_col1hd') : null;
+        const col2HdEl = uid ? document.getElementById(uid+'_col2hd') : null;
+        const col3HdEl = uid ? document.getElementById(uid+'_col3hd') : null;
+        const val1El = uid ? document.getElementById(uid+'_val1') : null;
+        const val2El = uid ? document.getElementById(uid+'_val2') : null;
+        const val3aEl = uid ? document.getElementById(uid+'_val3a') : null;
+        const val3bEl = uid ? document.getElementById(uid+'_val3b') : null;
+        const val3blabelEl = uid ? document.getElementById(uid+'_val3blabel') : null;
+        const col1hd = col1HdEl ? col1HdEl.value.trim() : 'Regular Swap';
+        const col2hd = col2HdEl ? col2HdEl.value.trim() : 'First 7 Days';
+        const col3hd = col3HdEl ? col3HdEl.value.trim() : 'Every 7 Days After';
+        const val1 = val1El ? val1El.value.trim() : '-68.72';
+        const val2 = val2El ? val2El.value.trim() : '0 Swap';
+        const val3a = val3aEl ? val3aEl.value.trim() : '0 Swap (if qualified)';
+        const val3b = val3bEl ? val3bEl.value.trim() : '-34.36';
+        const val3blabel = val3blabelEl ? val3blabelEl.value.trim() : 'Promo Swap (if not qualified)';
+        allSectionsHtml += `\n  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0;border:1px solid #E2E8F0;border-radius:10px;overflow:hidden;">
+    <tr>
+      <td align="center" valign="middle" style="background-color:#0E1F3D;color:#FFFFFF;font-size:12px;line-height:17px;font-weight:bold;padding:10px 4px;width:33%;">${escHtml(col1hd)}</td>
+      <td align="center" valign="middle" style="background-color:#22835F;color:#FFFFFF;font-size:12px;line-height:17px;font-weight:bold;padding:10px 4px;width:34%;">${escHtml(col2hd)}</td>
+      <td align="center" valign="middle" style="background-color:#3DA37A;color:#FFFFFF;font-size:12px;line-height:17px;font-weight:bold;padding:10px 4px;width:33%;">${escHtml(col3hd)}</td>
+    </tr>
+    <tr>
+      <td align="center" valign="middle" style="padding:20px 4px;border-right:1px solid #E2E8F0;">
+        <p style="margin:0;font-size:24px;line-height:30px;font-weight:bold;color:#B91C1C;">${escHtml(val1)}</p>
+      </td>
+      <td align="center" valign="middle" style="padding:20px 4px;border-right:1px solid #E2E8F0;background-color:#F0FAF5;">
+        <p style="margin:0;font-size:22px;line-height:30px;font-weight:bold;color:#22835F;">${escHtml(val2)}</p>
+      </td>
+      <td align="center" valign="middle" style="padding:12px 4px;">
+        <p style="margin:0;font-size:13px;line-height:18px;color:#334155;"><strong style="font-size:15px;color:#22835F;">${escHtml(val3a)}</strong></p>
+        <p style="margin:8px 0 0 0;font-size:13px;line-height:18px;color:#334155;"><strong style="font-size:15px;color:#0E1F3D;">${escHtml(val3b)}</strong><br><span style="font-size:11px;color:#64748B;">${escHtml(val3blabel)}</span></p>
+      </td>
+    </tr>
+  </table>`;
+      } else if (sid === 'promo-cta') {
+        const uid = sec.dataset.uid;
+        const labelEl = uid ? document.getElementById(uid+'_label') : null;
+        const urlEl = uid ? document.getElementById(uid+'_url') : null;
+        const label = (labelEl ? labelEl.value.trim() : null) || sec.dataset.ctaLabel || 'Trade Now';
+        const url = (urlEl ? urlEl.value.trim() : null) || sec.dataset.ctaUrl || 'https://mykvb.com/trade';
+        allSectionsHtml += `\n  <div style="text-align:center;margin:28px 0 8px;">
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;">
+      <tr><td style="background-color:#0D47A1;border-radius:9px;height:48px;">
+        <a href="${escAttr(url)}" target="_blank" style="display:inline-block;padding:0 36px;height:48px;line-height:48px;color:#FFFFFF;font-size:15px;font-weight:bold;text-decoration:none;">${escHtml(label)}</a>
+      </td></tr>
+    </table>
+  </div>`;
       }
     });
   } else {
@@ -3177,6 +4074,89 @@ function generateEmailHTML(forPreview) {
   // If no subject section in draggable list, prepend it (backward compat)
   if (!hasSubjectSection) allSectionsHtml = subjectHtml + allSectionsHtml;
 
+  // Detect promo email by checking for sections added via makePromoSection (data-promo-auto="1")
+  const hasPromoSections = draggable && !!draggable.querySelector('[data-promo-auto="1"]');
+  const bannerUrlForPromo = document.getElementById('bannerUrl') ? document.getElementById('bannerUrl').value.trim() : '';
+  const bannerLinkUrlForPromo = (document.getElementById('bannerLinkUrl') ? document.getElementById('bannerLinkUrl').value.trim() : '') || 'https://mykvb.com/';
+
+  if (hasPromoSections) {
+    const riskText = (typeof getLangRiskDisclosure === 'function') ? getLangRiskDisclosure() : 'Risk Disclosure: Trading foreign exchange and other derivative products carries risk. Please read and understand the nature of the product you are trading, including the extent of risk and its potential impact.';
+    const supportLabel = (typeof getLangStr === 'function') ? getLangStr('footerContact') : 'Customer Support';
+    const bannerBgColor = '#0E1F3D';
+
+    if (forPreview) {
+      // Preview mode: simplified div-based wrapper that simulates the real table structure
+      const bannerDivHtml = (forPreview || bannerUrlForPromo)
+        ? `<div style="font-size:0;line-height:0;background-color:${bannerBgColor};"><img src="${escAttr(bannerUrlForPromo || PLACEHOLDER_BANNER_HTML)}" width="600" alt="KVB" style="display:block;width:100%;height:auto;border:0;"></div>`
+        : '';
+      return `<div style="background-color:#EEF2F8;padding:16px 8px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;background-color:#FFFFFF;">
+    <div style="padding:16px;text-align:center;">
+      <a href="${escAttr(bannerLinkUrlForPromo)}" target="_blank"><img src="${KVB_LOGO}" width="103" height="35" alt="KVB" style="display:inline-block;border:0;vertical-align:middle;"></a>
+    </div>
+    ${bannerDivHtml}
+    <div style="padding:28px 28px 0 28px;">
+      ${allSectionsHtml}
+    </div>
+    <div style="background-color:#F2F6FA;padding:28px 16px;margin-top:28px;">
+      <p style="margin:0 0 12px 0;font-size:11px;line-height:1.6;color:#64748B;text-align:center;">${riskText}</p>
+      <p style="margin:0 0 12px 0;font-size:11px;text-align:center;color:#0D47A1;"><a href="mailto:support@kvbplus.com" style="color:#0D47A1;text-decoration:none;">support@kvbplus.com</a>&nbsp;|&nbsp;<a href="https://mykvb.com/im/" style="color:#0D47A1;text-decoration:none;">${supportLabel}</a></p>
+      <p style="margin:8px 0 0 0;font-size:10px;text-align:center;color:#94A3B8;">Copyright &copy; 2026 KVB. All rights reserved.</p>
+    </div>
+  </div>
+</div>`;
+    } else {
+      // Export mode: proper email table structure matching KVB reference templates
+      const bannerTrHtml = bannerUrlForPromo
+        ? `\n<tr><td style="font-size:0;line-height:0;background-color:${bannerBgColor};">\n  <a href="${escAttr(bannerLinkUrlForPromo)}" target="_blank" style="display:block;">\n    <img src="${escAttr(bannerUrlForPromo)}" width="600" alt="KVB" style="display:block;width:100%;max-width:600px;height:auto;border:0;">\n  </a>\n</td></tr>`
+        : '';
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="x-apple-disable-message-reformatting">
+<title>${escHtml(subject)}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#EEF2F8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#EEF2F8;">
+<tr><td align="center" style="padding:0;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;">
+<tr><td height="16" style="font-size:0;line-height:0;background-color:#EEF2F8;">&nbsp;</td></tr>
+<tr><td>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;max-width:600px;background-color:#FFFFFF;">
+<tr><td style="padding:16px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr><td align="center" valign="middle" style="width:100%;">
+      <a href="${escAttr(bannerLinkUrlForPromo)}" target="_blank"><img src="${KVB_LOGO}" width="103" height="35" alt="KVB" style="display:block;border:0;"></a>
+    </td></tr>
+  </table>
+</td></tr>
+${bannerTrHtml}
+<tr><td style="padding:28px 28px 0 28px;">
+${allSectionsHtml}
+</td></tr>
+<tr><td style="background-color:#F2F6FA;padding:28px 16px;">
+<p style="margin:0 0 12px 0;font-size:11px;line-height:1.6;color:#64748B;text-align:center;">${riskText}</p>
+<p style="margin:0 0 12px 0;font-size:11px;text-align:center;color:#0D47A1;">
+<a href="mailto:support@kvbplus.com" style="color:#0D47A1;text-decoration:none;">support@kvbplus.com</a>
+&nbsp; | &nbsp;
+<a href="https://mykvb.com/im/" style="color:#0D47A1;text-decoration:none;">${supportLabel}</a>
+</p>
+<p style="margin:8px 0 0 0;font-size:10px;text-align:center;color:#94A3B8;">Copyright &copy; 2026 KVB. All rights reserved.</p>
+</td></tr>
+</table>
+</td></tr>
+<tr><td height="16" style="font-size:0;line-height:0;background-color:#EEF2F8;">&nbsp;</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`;
+    }
+  }
+
+  // NON-PROMO: existing generic wrapper (unchanged)
   return `<div style="background-color: #fff; padding: 0; margin: 0;">
   <div style="background-color: #f6f6f6; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 30px 10px 50px; overflow-x: hidden; overflow-y: auto;">
     <div style="max-width: 600px; margin: 0 auto;">
@@ -3207,11 +4187,11 @@ function generateEmailHTML(forPreview) {
 
       <!-- Footer -->
       <div style="padding: 30px; color: #333333; font-size: 16px; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif;">
-        <p style="font-size: 20px; line-height: 30px; color: rgb(10, 30, 61); margin-top: 10px;">Yours sincerely,<br /><span style="font-weight: bold;">KVB</span></p>
-        <p style="font-size: 12px; color: rgb(108, 120, 139); line-height: 1.5;">Risk Disclosure: Trading Foreign Exchange and other derivatives products involve risk, please read and understand the nature of the trading which you are about to engage in and the extent of your exposure and risk.</p>
+        <p style="font-size: 20px; line-height: 30px; color: rgb(10, 30, 61); margin-top: 10px;">${getLangFooterSignOff()}</p>
+        <p style="font-size: 12px; color: rgb(108, 120, 139); line-height: 1.5;">${getLangRiskDisclosure()}</p>
         <div style="font-size: 12px; white-space: nowrap; color: rgb(108, 120, 139);">
           <span style="border-right: 1px solid #999999; padding-right: 8px; margin-right: 5px;">support@kvbplus.com</span>
-          <a href="https://mykvb.com/im/" style="color: #1f71e8; text-decoration: none;" target="_blank">Customer Service</a>
+          <a href="https://mykvb.com/im/" style="color: #1f71e8; text-decoration: none;" target="_blank">${getLangStr('footerContact')}</a>
         </div>
       </div>
 
@@ -3434,6 +4414,669 @@ const url = rawUrl && /^https?:\/\//i.test(rawUrl) ? rawUrl : rawUrl ? 'https://
   updatePreview();
 }
 
+function fmtAlign(elId, align) {
+  const area = document.getElementById(elId);
+  if (!area) return;
+  area.focus();
+  document.execCommand('justify' + align.charAt(0).toUpperCase() + align.slice(1), false, null);
+  updatePreview();
+}
+
+function fmtFontSize(elId, size) {
+  if (!size) return;
+  const area = document.getElementById(elId);
+  if (!area) return;
+  area.focus();
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed) return;
+  const range = sel.getRangeAt(0);
+  // Strip existing font-size spans from the selection before applying new size
+  // This allows reverting to smaller sizes
+  const frag = range.cloneContents();
+  const tmpDiv = document.createElement('div');
+  tmpDiv.appendChild(frag);
+  // Flatten nested font-size spans
+  tmpDiv.querySelectorAll('span').forEach(span => {
+    if (span.style.fontSize) {
+      span.style.fontSize = '';
+      if (!span.style.cssText.trim() && !span.className) {
+        // Unwrap if span has no other styles
+        const parent = span.parentNode;
+        while (span.firstChild) parent.insertBefore(span.firstChild, span);
+        parent.removeChild(span);
+      }
+    }
+  });
+  // Now wrap in new size span
+  const newSpan = document.createElement('span');
+  newSpan.style.fontSize = size;
+  newSpan.innerHTML = tmpDiv.innerHTML;
+  range.deleteContents();
+  range.insertNode(newSpan);
+  // Re-select the inserted span
+  const newRange = document.createRange();
+  newRange.selectNodeContents(newSpan);
+  sel.removeAllRanges();
+  sel.addRange(newRange);
+  updatePreview();
+}
+
+// ── Emoji picker for numbered steps ──
+const EMOJI_CATEGORIES = {
+  '🔢 Numbers': ['1️⃣','2️⃣','3️⃣','4️⃣','5️⃣','6️⃣','7️⃣','8️⃣','9️⃣','🔟'],
+  '✅ Check / Done': ['✅','☑️','✔️','💯','🏆','🎯','⭐','🌟','💪','👍'],
+  '💰 Finance': ['💰','💵','💸','💳','📈','📊','💱','🏦','💎','🏅'],
+  '🔧 Actions': ['🔧','⚙️','🚀','🎁','🎉','🔑','🔓','🛡️','📋','✏️'],
+  '📍 Steps': ['👉','➡️','▶️','🔜','📌','🧩','🔄','🔃','💡','🔔'],
+  '👤 People': ['👤','👥','🤝','🙋','👋','🫱','🫲','🙌','💬','📣'],
+  '🎯 Goals': ['🎯','🏁','⚡','🌊','🌱','📅','⏰','🗓️','📬','🗺️'],
+};
+
+let _emojiPickerUid = null;
+let _emojiPickerIdx = null;
+let _emojiPickerBtn = null;
+
+// ── Re-apply table style for body sections that contain a table ──
+function applyBodyTableStyle(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="body"]`);
+  if (!sec || !sec.dataset.origTableHtml) return;
+  const radioChecked = sec.querySelector(`input[name="${uid}_tblstyle"]:checked`);
+  const style = radioChecked ? radioChecked.value : 'classic';
+  // Table style configs (inline — email-safe)
+  const TABLE_STYLES = {
+    classic: { headerBg:'rgb(14,31,61)', headerColor:'#ffffff', cellBorder:'1px solid #e5e5e5', evenBg:'transparent', oddBg:'transparent' },
+    light:   { headerBg:'#f0f2f5',       headerColor:'#1a2a4a', cellBorder:'1px solid #e8ecf0', evenBg:'transparent', oddBg:'transparent' },
+    striped: { headerBg:'rgb(14,31,61)', headerColor:'#ffffff', cellBorder:'1px solid #e8ecf0', evenBg:'#f7f9fc',    oddBg:'transparent' },
+    minimal: { headerBg:'transparent',   headerColor:'#1a2a4a', cellBorder:'1px solid #d5dae2', evenBg:'transparent', oddBg:'transparent' },
+  };
+  const ts = TABLE_STYLES[style] || TABLE_STYLES.classic;
+  const el = document.getElementById(uid);
+  if (!el) return;
+  // Parse the stored HTML and rebuild with new styles
+  const tmp = document.createElement('div');
+  tmp.innerHTML = sec.dataset.origTableHtml;
+  const tbl = tmp.querySelector('table');
+  if (!tbl) { el.innerHTML = sec.dataset.origTableHtml; updatePreview(); return; }
+  tbl.style.cssText = 'border-collapse:collapse;width:100%;margin-top:10px;margin-bottom:20px;';
+  const thead = tbl.querySelector('thead');
+  if (thead) {
+    thead.querySelectorAll('tr').forEach(tr => {
+      tr.style.backgroundColor = ts.headerBg;
+      tr.style.color = ts.headerColor;
+      tr.style.textAlign = 'center';
+      tr.querySelectorAll('th,td').forEach(cell => {
+        cell.style.padding = '10px 12px';
+        cell.style.fontSize = '14px';
+        cell.style.border = ts.cellBorder;
+        cell.style.color = ts.headerColor;
+        cell.style.backgroundColor = ts.headerBg;
+      });
+    });
+  }
+  const tbody = tbl.querySelector('tbody');
+  if (tbody) {
+    tbody.querySelectorAll('tr').forEach((tr, ri) => {
+      const rowBg = (ri % 2 === 0) ? ts.evenBg : ts.oddBg;
+      tr.style.backgroundColor = rowBg || '';
+      tr.querySelectorAll('td').forEach((cell, ci) => {
+        cell.style.border = ts.cellBorder;
+        cell.style.padding = '12px';
+        cell.style.textAlign = 'center';
+        if (ci === 0) cell.style.textAlign = 'left';
+      });
+    });
+  }
+  el.innerHTML = tmp.innerHTML;
+  updatePreview();
+}
+
+function numStepsPickEmoji(uid, idx, btn) {
+  // Close existing picker if open
+  const existing = document.getElementById('_emojiPicker');
+  if (existing) {
+    existing.remove();
+    if (_emojiPickerUid === uid && _emojiPickerIdx === idx) {
+      _emojiPickerUid = null; _emojiPickerIdx = null; _emojiPickerBtn = null;
+      return;
+    }
+  }
+  _emojiPickerUid = uid; _emojiPickerIdx = idx; _emojiPickerBtn = btn;
+
+  const picker = document.createElement('div');
+  picker.id = '_emojiPicker';
+  picker.style.cssText = 'position:absolute;z-index:8000;background:var(--kvb-white);border:1px solid var(--kvb-border);border-radius:10px;padding:10px;box-shadow:0 8px 28px rgba(0,0,0,0.2);width:260px;max-height:300px;overflow-y:auto;';
+
+  let html = '';
+  for (const [cat, emojis] of Object.entries(EMOJI_CATEGORIES)) {
+    html += `<div style="font-size:10px;font-weight:700;color:var(--kvb-muted);text-transform:uppercase;letter-spacing:0.05em;margin:6px 0 4px;">${cat}</div>`;
+    html += `<div style="display:flex;flex-wrap:wrap;gap:2px;margin-bottom:4px;">`;
+    emojis.forEach(em => {
+      html += `<button onclick="numStepsInsertEmoji('${uid}',${idx},'${em}')" title="${em}" style="background:none;border:1px solid transparent;border-radius:5px;font-size:18px;cursor:pointer;padding:3px 5px;line-height:1;transition:background 0.1s;" onmouseover="this.style.background='var(--kvb-light)'" onmouseout="this.style.background='none'">${em}</button>`;
+    });
+    html += `</div>`;
+  }
+  html += `<div style="border-top:1px solid var(--kvb-border);margin-top:6px;padding-top:6px;">
+    <button onclick="numStepsInsertEmoji('${uid}',${idx},'')" style="font-size:11px;color:var(--kvb-muted);background:none;border:none;cursor:pointer;padding:2px;">✕ Clear emoji</button>
+  </div>`;
+
+  picker.innerHTML = html;
+
+  // Position near the button
+  const rect = btn.getBoundingClientRect();
+  picker.style.position = 'fixed';
+  picker.style.top = (rect.bottom + 4) + 'px';
+  picker.style.left = Math.min(rect.left, window.innerWidth - 270) + 'px';
+  document.body.appendChild(picker);
+
+  // Close on outside click
+  setTimeout(() => {
+    document.addEventListener('click', function closePicker(e) {
+      if (!picker.contains(e.target) && e.target !== btn) {
+        picker.remove();
+        document.removeEventListener('click', closePicker);
+      }
+    });
+  }, 50);
+}
+
+function numStepsInsertEmoji(uid, idx, emoji) {
+  const picker = document.getElementById('_emojiPicker');
+  if (picker) picker.remove();
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="numbered-steps"]`);
+  if (!sec) return;
+  let steps = [];
+  try { steps = JSON.parse(sec.dataset.stepsData.replace(/&quot;/g, '"')); } catch(e) {}
+  if (steps[idx]) steps[idx].emoji = emoji;
+  sec.dataset.stepsData = JSON.stringify(steps);
+  numStepsRender(uid);
+  updatePreview();
+}
+
+function fmtEyebrow(uid, cmd) {
+  // Eyebrow text is a plain input — just toggle a class marker we track via dataset
+  const inp = document.getElementById(uid + '_text');
+  if (!inp) return;
+  // We store bold/italic/underline as data attrs on the input
+  const key = 'data-fmt-' + cmd;
+  const on = inp.getAttribute(key) === '1';
+  inp.setAttribute(key, on ? '0' : '1');
+  inp.style.fontWeight = inp.getAttribute('data-fmt-bold') === '1' ? '700' : '400';
+  inp.style.fontStyle = inp.getAttribute('data-fmt-italic') === '1' ? 'italic' : 'normal';
+  inp.style.textDecoration = inp.getAttribute('data-fmt-underline') === '1' ? 'underline' : 'none';
+  updatePreview();
+}
+
+// ── Numbered Steps UI helpers ──
+function numStepsGetData(uid) {
+  const cont = document.getElementById(uid + '_steps');
+  if (!cont) return [];
+  return Array.from(cont.querySelectorAll('.num-step-row')).map(row => ({
+    title: row.querySelector('.ns-title').value,
+    desc: row.querySelector('.ns-desc').value,
+    emoji: row.querySelector('.ns-emoji') ? row.querySelector('.ns-emoji').value : '',
+  }));
+}
+function numStepsRender(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="numbered-steps"]`);
+  if (!sec) return;
+  let steps = [];
+  try { steps = JSON.parse(sec.dataset.stepsData.replace(/&quot;/g, '"')); } catch(e) {}
+  const cont = document.getElementById(uid + '_steps');
+  if (!cont) return;
+  cont.innerHTML = steps.map((s, i) => `
+    <div class="num-step-row" style="margin-bottom:8px;padding:8px;background:var(--kvb-light);border-radius:6px;border:1px solid var(--kvb-border);">
+      <div style="display:flex;gap:8px;align-items:flex-start;">
+        <div style="font-size:11px;font-weight:700;color:#2962FE;padding-top:2px;min-width:18px;">${i+1}.</div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+          <div style="display:flex;gap:4px;align-items:center;">
+            <input class="ns-emoji" type="text" value="${escAttrInline(s.emoji||'')}" placeholder="emoji" title="Optional emoji icon" style="font-size:15px;width:40px;text-align:center;padding:3px 4px;border:1px solid var(--kvb-border);border-radius:5px;background:var(--kvb-bg);" oninput="numStepsSave('${uid}');updatePreview()">
+            <button onclick="numStepsPickEmoji('${uid}',${i},this)" style="font-size:11px;padding:3px 6px;border:1px solid var(--kvb-border);border-radius:5px;background:var(--kvb-bg);color:var(--kvb-muted);cursor:pointer;white-space:nowrap;" title="Pick emoji">😀 Pick</button>
+            <input class="ns-title" type="text" value="${escAttrInline(s.title)}" placeholder="Step title" style="font-size:12px;font-weight:600;flex:1;" oninput="numStepsSave('${uid}');updatePreview()">
+          </div>
+          <textarea class="ns-desc" rows="2" placeholder="Step description" style="font-size:12px;resize:vertical;" oninput="numStepsSave('${uid}');updatePreview()">${s.desc}</textarea>
+        </div>
+        <button onclick="numStepsDel('${uid}',${i})" style="background:none;border:none;cursor:pointer;color:var(--kvb-muted);font-size:14px;padding:0 4px;" onmouseover="this.style.color='#cc3333'" onmouseout="this.style.color='var(--kvb-muted)'">×</button>
+      </div>
+    </div>`).join('');
+}
+function numStepsSave(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="numbered-steps"]`);
+  if (!sec) return;
+  sec.dataset.stepsData = JSON.stringify(numStepsGetData(uid));
+}
+function numStepsDel(uid, idx) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="numbered-steps"]`);
+  if (!sec) return;
+  let steps = [];
+  try { steps = JSON.parse(sec.dataset.stepsData.replace(/&quot;/g, '"')); } catch(e) {}
+  steps.splice(idx, 1);
+  sec.dataset.stepsData = JSON.stringify(steps);
+  numStepsRender(uid);
+  updatePreview();
+}
+function numStepsAdd(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="numbered-steps"]`);
+  if (!sec) return;
+  let steps = [];
+  try { steps = JSON.parse(sec.dataset.stepsData.replace(/&quot;/g, '"')); } catch(e) {}
+  steps.push({title:'Step title', desc:'Step description.', emoji:''});
+  sec.dataset.stepsData = JSON.stringify(steps);
+  numStepsRender(uid);
+  updatePreview();
+}
+
+// ── Task Cards UI helpers ──
+function taskCardsGetData(uid) {
+  const cont = document.getElementById(uid + '_tasks');
+  if (!cont) return [];
+  return Array.from(cont.querySelectorAll('.task-card-row')).map(row => ({
+    label: row.querySelector('.tc-label').value,
+    amount: row.querySelector('.tc-amount').value,
+    desc: row.querySelector('.tc-desc').value,
+  }));
+}
+function taskCardsRender(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="task-cards"]`);
+  if (!sec) return;
+  let tasks = [];
+  try { tasks = JSON.parse(sec.dataset.tasksData.replace(/&quot;/g, '"')); } catch(e) {}
+  const cont = document.getElementById(uid + '_tasks');
+  if (!cont) return;
+  cont.innerHTML = tasks.map((t, i) => `
+    <div class="task-card-row" style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;padding:8px;background:var(--kvb-light);border-radius:6px;border:1px solid var(--kvb-border);">
+      <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+        <input class="tc-label" type="text" value="${escAttrInline(t.label)}" placeholder="TASK 1 · DEPOSIT" style="font-size:11px;font-weight:700;color:#2962FE;" oninput="taskCardsSave('${uid}');updatePreview()">
+        <input class="tc-amount" type="text" value="${escAttrInline(t.amount)}" placeholder="USD 300" style="font-size:16px;font-weight:700;" oninput="taskCardsSave('${uid}');updatePreview()">
+        <textarea class="tc-desc" rows="2" placeholder="Description" style="font-size:12px;resize:vertical;" oninput="taskCardsSave('${uid}');updatePreview()">${t.desc}</textarea>
+      </div>
+      <button onclick="taskCardsDel('${uid}',${i})" style="background:none;border:none;cursor:pointer;color:var(--kvb-muted);font-size:14px;padding:0 4px;" onmouseover="this.style.color='#cc3333'" onmouseout="this.style.color='var(--kvb-muted)'">×</button>
+    </div>`).join('');
+}
+function taskCardsSave(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="task-cards"]`);
+  if (!sec) return;
+  sec.dataset.tasksData = JSON.stringify(taskCardsGetData(uid));
+}
+function taskCardsDel(uid, idx) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="task-cards"]`);
+  if (!sec) return;
+  let tasks = [];
+  try { tasks = JSON.parse(sec.dataset.tasksData.replace(/&quot;/g, '"')); } catch(e) {}
+  tasks.splice(idx, 1);
+  sec.dataset.tasksData = JSON.stringify(tasks);
+  taskCardsRender(uid);
+  updatePreview();
+}
+function taskCardsAdd(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="task-cards"]`);
+  if (!sec) return;
+  let tasks = [];
+  try { tasks = JSON.parse(sec.dataset.tasksData.replace(/&quot;/g, '"')); } catch(e) {}
+  tasks.push({label:`TASK ${tasks.length+1}`, amount:'', desc:''});
+  sec.dataset.tasksData = JSON.stringify(tasks);
+  taskCardsRender(uid);
+  updatePreview();
+}
+
+// ── Stat Row UI helpers ──
+function statRowGetData(uid) {
+  const cont = document.getElementById(uid + '_stats');
+  if (!cont) return [];
+  return Array.from(cont.querySelectorAll('.stat-row-item')).map(row => ({
+    value: row.querySelector('.sr-value').value,
+    label: row.querySelector('.sr-label').value,
+    highlight: row.querySelector('.sr-highlight').checked,
+  }));
+}
+function statRowRender(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="stat-row"]`);
+  if (!sec) return;
+  let stats = [];
+  try { stats = JSON.parse(sec.dataset.statsData.replace(/&quot;/g, '"')); } catch(e) {}
+  const cont = document.getElementById(uid + '_stats');
+  if (!cont) return;
+  cont.innerHTML = stats.map((s, i) => `
+    <div class="stat-row-item" style="display:flex;gap:8px;align-items:center;margin-bottom:6px;padding:6px 8px;background:${s.highlight?'rgba(41,98,254,0.08)':'var(--kvb-light)'};border-radius:6px;border:1px solid ${s.highlight?'#2962FE':'var(--kvb-border)'};">
+      <input class="sr-value" type="text" value="${escAttrInline(s.value)}" placeholder="20%" style="font-size:16px;font-weight:700;width:60px;" oninput="statRowSave('${uid}');updatePreview()">
+      <input class="sr-label" type="text" value="${escAttrInline(s.label)}" placeholder="Label text" style="font-size:12px;flex:1;" oninput="statRowSave('${uid}');updatePreview()">
+      <label style="font-size:11px;display:flex;align-items:center;gap:3px;white-space:nowrap;cursor:pointer;">
+        <input class="sr-highlight" type="checkbox" ${s.highlight?'checked':''} onchange="statRowSave('${uid}');statRowRender('${uid}');updatePreview()"> Blue bg
+      </label>
+      <button onclick="statRowDel('${uid}',${i})" style="background:none;border:none;cursor:pointer;color:var(--kvb-muted);font-size:14px;padding:0 4px;" onmouseover="this.style.color='#cc3333'" onmouseout="this.style.color='var(--kvb-muted)'">×</button>
+    </div>`).join('');
+}
+function statRowSave(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="stat-row"]`);
+  if (!sec) return;
+  sec.dataset.statsData = JSON.stringify(statRowGetData(uid));
+}
+function statRowDel(uid, idx) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="stat-row"]`);
+  if (!sec) return;
+  let stats = [];
+  try { stats = JSON.parse(sec.dataset.statsData.replace(/&quot;/g, '"')); } catch(e) {}
+  stats.splice(idx, 1);
+  sec.dataset.statsData = JSON.stringify(stats);
+  statRowRender(uid);
+  updatePreview();
+}
+function statRowAdd(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="stat-row"]`);
+  if (!sec) return;
+  let stats = [];
+  try { stats = JSON.parse(sec.dataset.statsData.replace(/&quot;/g, '"')); } catch(e) {}
+  stats.push({value:'', label:'', highlight:false});
+  sec.dataset.statsData = JSON.stringify(stats);
+  statRowRender(uid);
+  updatePreview();
+}
+
+// ── Icon Steps UI helpers ──
+function iconStepsGetData(uid) {
+  const cont = document.getElementById(uid + '_isteps');
+  if (!cont) return [];
+  return Array.from(cont.querySelectorAll('.icon-step-row')).map(row => ({
+    num: row.querySelector('.is-num').value,
+    title: row.querySelector('.is-title').value,
+    sub: row.querySelector('.is-sub').value,
+  }));
+}
+function iconStepsRender(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="icon-steps"]`);
+  if (!sec) return;
+  let steps = [];
+  try { steps = JSON.parse(sec.dataset.istepsData.replace(/&quot;/g, '"')); } catch(e) {}
+  const cont = document.getElementById(uid + '_isteps');
+  if (!cont) return;
+  cont.innerHTML = steps.map((s, i) => `
+    <div class="icon-step-row" style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;padding:8px;background:var(--kvb-light);border-radius:6px;border:1px solid var(--kvb-border);">
+      <input class="is-num" type="text" value="${escAttrInline(s.num)}" placeholder="01" style="font-size:12px;font-weight:700;color:#2962FE;width:36px;" oninput="iconStepsSave('${uid}');updatePreview()">
+      <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+        <input class="is-title" type="text" value="${escAttrInline(s.title)}" placeholder="Step title" style="font-size:13px;font-weight:700;" oninput="iconStepsSave('${uid}');updatePreview()">
+        <input class="is-sub" type="text" value="${escAttrInline(s.sub)}" placeholder="Subtitle / description" style="font-size:12px;" oninput="iconStepsSave('${uid}');updatePreview()">
+      </div>
+      <button onclick="iconStepsDel('${uid}',${i})" style="background:none;border:none;cursor:pointer;color:var(--kvb-muted);font-size:14px;padding:0 4px;" onmouseover="this.style.color='#cc3333'" onmouseout="this.style.color='var(--kvb-muted)'">×</button>
+    </div>`).join('');
+}
+function iconStepsSave(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="icon-steps"]`);
+  if (!sec) return;
+  sec.dataset.istepsData = JSON.stringify(iconStepsGetData(uid));
+}
+function iconStepsDel(uid, idx) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="icon-steps"]`);
+  if (!sec) return;
+  let steps = [];
+  try { steps = JSON.parse(sec.dataset.istepsData.replace(/&quot;/g, '"')); } catch(e) {}
+  steps.splice(idx, 1);
+  sec.dataset.istepsData = JSON.stringify(steps);
+  iconStepsRender(uid);
+  updatePreview();
+}
+function iconStepsAdd(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="icon-steps"]`);
+  if (!sec) return;
+  let steps = [];
+  try { steps = JSON.parse(sec.dataset.istepsData.replace(/&quot;/g, '"')); } catch(e) {}
+  const num = String(steps.length + 1).padStart(2, '0');
+  steps.push({num, title:'Step title', sub:'Step description.'});
+  sec.dataset.istepsData = JSON.stringify(steps);
+  iconStepsRender(uid);
+  updatePreview();
+}
+
+// Helper for safe HTML attribute encoding (inline, avoids double-escaping existing &amp; etc.)
+function escAttrInline(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ── Panel HTML builder helpers (used in both promoDefaultSections and addSectionFromModal) ──
+
+function buildRoleCardsPanel(uid, label, initialCards) {
+  const cardsJson = JSON.stringify(initialCards||[]).replace(/"/g,'&quot;');
+  return `<div style="padding:16px 18px;">
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Section subtitle (shown above cards)</label>
+      <input id="${uid}_subtitle" type="text" value="" placeholder="e.g. Copy strategies or earn from your signals"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div class="rc-cards-list" style="margin-bottom:8px;"></div>
+    <button onclick="roleCardsAddCard('${uid}')" style="font-size:12px;padding:5px 12px;border:1px dashed #2962FE;border-radius:4px;background:none;color:#2962FE;cursor:pointer;">+ Add Card</button>
+    <div class="hint-text">Role comparison cards with check-mark bullet lists.</div>
+  </div>`;
+}
+
+function buildCalloutBoxPanel(uid) {
+  return `<div style="padding:16px 18px;">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Style:</label>
+      <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_callstyle" value="info" checked onchange="updatePreview()"> Blue (Info)</label>
+      <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_callstyle" value="neutral" onchange="updatePreview()"> Neutral</label>
+      <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_callstyle" value="success" onchange="updatePreview()"> Green</label>
+      <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_callstyle" value="warning" onchange="updatePreview()"> Amber</label>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Text align:</label>
+      <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_callalign" value="left" checked onchange="updatePreview()"> Left</label>
+      <label style="cursor:pointer;font-size:11px;"><input type="radio" name="${uid}_callalign" value="center" onchange="updatePreview()"> Center</label>
+    </div>
+    <textarea id="${uid}_text" rows="3" placeholder="Enter callout text…"
+      style="width:100%;box-sizing:border-box;padding:8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;resize:vertical;background:var(--kvb-white);color:var(--kvb-text);"
+      oninput="updatePreview()"></textarea>
+    <div class="hint-text">Left-border callout box. Use for important notes, trust statements, or closing messages.</div>
+  </div>`;
+}
+
+function buildCampaignHeroPanel(uid) {
+  return `<div style="padding:16px 18px;">
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Badge text (pill label)</label>
+      <input id="${uid}_badge" type="text" value="" placeholder="e.g. KVB EXCLUSIVE CASHBACK"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Main headline</label>
+      <input id="${uid}_headline" type="text" value="" placeholder="e.g. Cashback up to USD 3,000"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Subtitle / description</label>
+      <input id="${uid}_subtitle" type="text" value="" placeholder="e.g. Deposit and trade to unlock your cashback reward"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div class="hint-text">Blue pill badge + large headline + subtitle. Used for campaign highlight sections.</div>
+  </div>`;
+}
+
+function buildSecondaryImagePanel(uid) {
+  return `<div style="padding:16px 18px;">
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Image URL</label>
+      <input id="${uid}_img" type="text" value="" placeholder="https://…"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Link URL (optional)</label>
+      <input id="${uid}_link" type="text" value="" placeholder="https://mykvb.com/…"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Alt text</label>
+      <input id="${uid}_alt" type="text" value="" placeholder="Describe the image"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div style="margin-bottom:8px;">
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Caption (optional)</label>
+      <input id="${uid}_caption" type="text" value="" placeholder="Text shown below the image"
+        style="width:100%;box-sizing:border-box;margin-top:4px;padding:6px 8px;border:1px solid var(--kvb-border);border-radius:4px;font-size:12px;background:var(--kvb-white);color:var(--kvb-text);"
+        oninput="updatePreview()">
+    </div>
+    <div class="hint-text">Secondary image block (e.g. prize pool graphic). Displayed centered with optional caption.</div>
+  </div>`;
+}
+
+function buildSwapTablePanel(uid) {
+  return `<div style="padding:16px 18px;">
+    <p style="margin:0 0 10px;font-size:11px;font-weight:600;color:var(--kvb-muted);">3-column swap comparison table (dark navy / green headers)</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+      <div>
+        <label style="font-size:10px;color:var(--kvb-muted);">Col 1 header</label>
+        <input id="${uid}_col1hd" type="text" value="Regular Swap" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+      </div>
+      <div>
+        <label style="font-size:10px;color:var(--kvb-muted);">Col 2 header</label>
+        <input id="${uid}_col2hd" type="text" value="First 7 Days" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+      </div>
+      <div>
+        <label style="font-size:10px;color:var(--kvb-muted);">Col 3 header</label>
+        <input id="${uid}_col3hd" type="text" value="Every 7 Days After" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;">
+      <div>
+        <label style="font-size:10px;color:var(--kvb-muted);">Col 1 value (e.g. -68.72)</label>
+        <input id="${uid}_val1" type="text" value="-68.72" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+      </div>
+      <div>
+        <label style="font-size:10px;color:var(--kvb-muted);">Col 2 value (e.g. 0 Swap)</label>
+        <input id="${uid}_val2" type="text" value="0 Swap" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+      <div>
+        <label style="font-size:10px;color:var(--kvb-muted);">Col 3 – qualified value</label>
+        <input id="${uid}_val3a" type="text" value="0 Swap" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+      </div>
+      <div>
+        <label style="font-size:10px;color:var(--kvb-muted);">Col 3 – not qualified value</label>
+        <input id="${uid}_val3b" type="text" value="-34.36" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+      </div>
+    </div>
+    <div style="margin-top:6px;">
+      <label style="font-size:10px;color:var(--kvb-muted);">Col 3 – not qualified label (e.g. Promo Swap)</label>
+      <input id="${uid}_val3blabel" type="text" value="Promo Swap" style="width:100%;box-sizing:border-box;padding:4px 6px;border:1px solid var(--kvb-border);border-radius:4px;font-size:11px;background:var(--kvb-white);color:var(--kvb-text);" oninput="updatePreview()">
+    </div>
+    <div class="hint-text">Custom swap rate comparison table with navy/green headers. Used in Swap-Free program emails.</div>
+  </div>`;
+}
+
+// ── Role Cards panel dynamic render / save / add / remove ──
+function roleCardsRender(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="role-cards"]`);
+  if (!sec) return;
+  let cards = [];
+  try { cards = JSON.parse((sec.dataset.cardsData||'[]').replace(/&quot;/g,'"')); } catch(e) { cards = []; }
+  const container = sec.querySelector('.rc-cards-list');
+  if (!container) return;
+  container.innerHTML = '';
+  cards.forEach((card, ci) => {
+    const cardDiv = document.createElement('div');
+    cardDiv.style.cssText = 'background:var(--kvb-light);border-radius:8px;padding:12px 14px;margin-bottom:8px;border:1px solid var(--kvb-border);';
+    cardDiv.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <input type="text" placeholder="Card title (e.g. Copy Trader)" value="${escAttrInline(card.title||'')}"
+          style="flex:1;font-size:13px;font-weight:600;border:1px solid var(--kvb-border);border-radius:4px;padding:4px 8px;background:var(--kvb-white);color:var(--kvb-text);"
+          oninput="roleCardsSave('${uid}')">
+        <button onclick="roleCardsRemoveCard('${uid}',${ci})" style="margin-left:8px;background:none;border:none;color:#cc3333;cursor:pointer;font-size:14px;padding:0 4px;">✕</button>
+      </div>
+      <div class="rc-bullets-${ci}">
+        ${(card.bullets||[]).map((b,bi) => `
+        <div style="display:flex;gap:4px;margin-bottom:4px;">
+          <span style="color:#0D47A1;font-weight:700;font-size:13px;margin-top:3px;">✓</span>
+          <input type="text" value="${escAttrInline(b)}" placeholder="Bullet point"
+            style="flex:1;font-size:12px;border:1px solid var(--kvb-border);border-radius:4px;padding:3px 6px;background:var(--kvb-white);color:var(--kvb-text);"
+            oninput="roleCardsSave('${uid}')">
+          <button onclick="roleCardsRemoveBullet('${uid}',${ci},${bi})" style="background:none;border:none;color:#aaa;cursor:pointer;font-size:12px;padding:0 2px;">✕</button>
+        </div>`).join('')}
+      </div>
+      <button onclick="roleCardsAddBullet('${uid}',${ci})" style="font-size:11px;color:#2962FE;border:none;background:none;cursor:pointer;padding:2px 0;margin-top:2px;">+ Add bullet</button>`;
+    container.appendChild(cardDiv);
+  });
+}
+function roleCardsSave(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="role-cards"]`);
+  if (!sec) return;
+  const container = sec.querySelector('.rc-cards-list');
+  if (!container) return;
+  const cardDivs = container.querySelectorAll(':scope > div');
+  let cards = [];
+  cardDivs.forEach(cardDiv => {
+    const titleEl = cardDiv.querySelector('input[type="text"]');
+    const bulletEls = cardDiv.querySelectorAll('div > input[type="text"]');
+    cards.push({ title: titleEl ? titleEl.value : '', bullets: Array.from(bulletEls).map(el => el.value) });
+  });
+  sec.dataset.cardsData = JSON.stringify(cards);
+  updatePreview();
+}
+function roleCardsAddCard(uid) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="role-cards"]`);
+  if (!sec) return;
+  let cards = [];
+  try { cards = JSON.parse((sec.dataset.cardsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+  cards.push({ title: 'New Card', bullets: ['Feature one', 'Feature two'] });
+  sec.dataset.cardsData = JSON.stringify(cards);
+  roleCardsRender(uid);
+  updatePreview();
+}
+function roleCardsRemoveCard(uid, idx) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="role-cards"]`);
+  if (!sec) return;
+  let cards = [];
+  try { cards = JSON.parse((sec.dataset.cardsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+  cards.splice(idx, 1);
+  sec.dataset.cardsData = JSON.stringify(cards);
+  roleCardsRender(uid);
+  updatePreview();
+}
+function roleCardsAddBullet(uid, cardIdx) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="role-cards"]`);
+  if (!sec) return;
+  roleCardsSave(uid);
+  let cards = [];
+  try { cards = JSON.parse((sec.dataset.cardsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+  if (cards[cardIdx]) { cards[cardIdx].bullets = cards[cardIdx].bullets || []; cards[cardIdx].bullets.push('New bullet'); }
+  sec.dataset.cardsData = JSON.stringify(cards);
+  roleCardsRender(uid);
+  updatePreview();
+}
+function roleCardsRemoveBullet(uid, cardIdx, bulletIdx) {
+  const sec = document.querySelector(`[data-uid="${uid}"][data-section-id="role-cards"]`);
+  if (!sec) return;
+  roleCardsSave(uid);
+  let cards = [];
+  try { cards = JSON.parse((sec.dataset.cardsData||'[]').replace(/&quot;/g,'"')); } catch(e) {}
+  if (cards[cardIdx] && cards[cardIdx].bullets) { cards[cardIdx].bullets.splice(bulletIdx, 1); }
+  sec.dataset.cardsData = JSON.stringify(cards);
+  roleCardsRender(uid);
+  updatePreview();
+}
+
+// Render all dynamic promotion sections once they are inserted
+function renderAllPromoSections() {
+  document.querySelectorAll('[data-section-id="numbered-steps"]').forEach(sec => {
+    if (sec.dataset.uid) numStepsRender(sec.dataset.uid);
+  });
+  document.querySelectorAll('[data-section-id="task-cards"]').forEach(sec => {
+    if (sec.dataset.uid) taskCardsRender(sec.dataset.uid);
+  });
+  document.querySelectorAll('[data-section-id="stat-row"]').forEach(sec => {
+    if (sec.dataset.uid) statRowRender(sec.dataset.uid);
+  });
+  document.querySelectorAll('[data-section-id="icon-steps"]').forEach(sec => {
+    if (sec.dataset.uid) iconStepsRender(sec.dataset.uid);
+  });
+  document.querySelectorAll('[data-section-id="role-cards"]').forEach(sec => {
+    if (sec.dataset.uid) roleCardsRender(sec.dataset.uid);
+  });
+}
+
 function clearContent() {
   document.getElementById('contentArea').innerHTML = '';
   updatePreview();
@@ -3627,6 +5270,113 @@ function downloadHTML() {
 // ─────────────────────────────────────────────────────────
 //  RESET
 // ─────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────
+//  LANGUAGE SYSTEM
+// ─────────────────────────────────────────────────────────
+const LANG_STRINGS = {
+  en: {
+    greetingDear: 'Dear Customer,',
+    signOff: 'Sincerely,<br>KVB Team',
+    footerUnsubscribe: 'Unsubscribe',
+    footerPrivacy: 'Privacy Policy',
+    footerContact: 'Contact Us',
+    ctaStart: 'Start Trading',
+    subjectPlaceholder: 'Email subject line…',
+    bodyPlaceholder: 'Dear Clients,\n\nEnter your email body here…',
+  },
+  th: {
+    greetingDear: 'เรียนลูกค้าผู้มีอุปการะคุณ',
+    signOff: 'ด้วยความนับถือ<br>KVB Team',
+    footerUnsubscribe: 'ยกเลิกการสมัคร',
+    footerPrivacy: 'นโยบายความเป็นส่วนตัว',
+    footerContact: 'ติดต่อเรา',
+    ctaStart: 'เริ่มเทรด',
+    subjectPlaceholder: 'หัวเรื่องอีเมล…',
+    bodyPlaceholder: 'เรียนลูกค้า\n\nกรุณากรอกเนื้อหาอีเมลที่นี่…',
+  },
+  vi: {
+    greetingDear: 'Kính gửi Quý khách hàng,',
+    signOff: 'Trân trọng,<br>KVB Team',
+    footerUnsubscribe: 'Hủy đăng ký',
+    footerPrivacy: 'Chính sách bảo mật',
+    footerContact: 'Liên hệ chúng tôi',
+    ctaStart: 'Bắt đầu giao dịch',
+    subjectPlaceholder: 'Tiêu đề email…',
+    bodyPlaceholder: 'Kính gửi Quý khách,\n\nVui lòng nhập nội dung email tại đây…',
+  },
+  zh: {
+    greetingDear: '尊敬的客户，',
+    signOff: '此致<br>KVB 团队',
+    footerUnsubscribe: '取消订阅',
+    footerPrivacy: '隐私政策',
+    footerContact: '联系我们',
+    ctaStart: '开始交易',
+    subjectPlaceholder: '邮件主题…',
+    bodyPlaceholder: '尊敬的客户，\n\n请在此处输入邮件正文…',
+  },
+};
+let currentLang = 'en';
+function setLanguage(lang) {
+  currentLang = lang;
+  const str = LANG_STRINGS[lang] || LANG_STRINGS.en;
+  // Update subject placeholder
+  const subj = document.getElementById('subjectInput');
+  if (subj) subj.placeholder = str.subjectPlaceholder;
+  // Update the main body area placeholder-like content only if it's empty or has default EN content
+  const bodyArea = document.getElementById('contentArea');
+  if (bodyArea) {
+    const current = bodyArea.innerText.trim();
+    // If the body area is empty or contains the previous language default greeting, swap it out
+    const prevEN = LANG_STRINGS.en.bodyPlaceholder.split('\n')[0];
+    const prevTH = LANG_STRINGS.th.bodyPlaceholder.split('\n')[0];
+    const prevVI = LANG_STRINGS.vi.bodyPlaceholder.split('\n')[0];
+    const prevZH = LANG_STRINGS.zh.bodyPlaceholder.split('\n')[0];
+    const isDefaultGreeting = !current || current === prevEN || current === prevTH || current === prevVI || current === prevZH;
+    if (isDefaultGreeting) {
+      bodyArea.innerHTML = str.bodyPlaceholder.replace(/\n/g,'<br>');
+    }
+  }
+  // Update the CTA button label if it still has the default
+  const ctaLabelEl = document.getElementById('ctaLabel');
+  if (ctaLabelEl) {
+    const prevLabels = ['Start Trading','เริ่มเทรด','Bắt đầu giao dịch','开始交易'];
+    if (prevLabels.includes(ctaLabelEl.value.trim())) {
+      ctaLabelEl.value = str.ctaStart;
+    }
+  }
+  // Show a toast notice
+  const toast = document.createElement('div');
+  toast.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#0e1f3d;color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:8px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:opacity 0.3s;';
+  const langNames = {en:'English 🇬🇧',th:'ภาษาไทย 🇹🇭',vi:'Tiếng Việt 🇻🇳',zh:'中文 🇨🇳'};
+  toast.textContent = `Language switched to ${langNames[lang] || lang}`;
+  document.body.appendChild(toast);
+  setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 400); }, 2500);
+  updatePreview();
+}
+function getLangStr(key) {
+  return (LANG_STRINGS[currentLang] || LANG_STRINGS.en)[key] || (LANG_STRINGS.en[key] || '');
+}
+
+function getLangFooterSignOff() {
+  const so = {
+    en: 'Yours sincerely,<br /><span style="font-weight:bold;">KVB</span>',
+    th: 'ด้วยความนับถือ<br /><span style="font-weight:bold;">KVB</span>',
+    vi: 'Trân trọng,<br /><span style="font-weight:bold;">KVB</span>',
+    zh: '此致<br /><span style="font-weight:bold;">KVB 团队</span>',
+  };
+  return so[currentLang] || so.en;
+}
+
+function getLangRiskDisclosure() {
+  const rd = {
+    en: 'Risk Disclosure: Trading Foreign Exchange and other derivatives products involve risk, please read and understand the nature of the trading which you are about to engage in and the extent of your exposure and risk.',
+    th: 'การเปิดเผยความเสี่ยง: การซื้อขายอัตราแลกเปลี่ยนเงินตราต่างประเทศและผลิตภัณฑ์อนุพันธ์อื่นๆ มีความเสี่ยง กรุณาอ่านและทำความเข้าใจลักษณะการซื้อขายที่คุณกำลังจะดำเนินการและขอบเขตของความเสี่ยงที่คุณอาจได้รับ',
+    vi: 'Tiết lộ rủi ro: Giao dịch ngoại hối và các sản phẩm phái sinh khác đều có rủi ro. Vui lòng đọc và hiểu rõ bản chất của hoạt động giao dịch và mức độ rủi ro mà bạn có thể gặp phải.',
+    zh: '风险披露：外汇及其他衍生品交易存在风险，请在交易前详细阅读并理解您所从事交易的性质及相关风险。',
+  };
+  return rd[currentLang] || rd.en;
+}
+
 function resetAll() {
   // Remove dynamically added sections (Stop Level, HMR, extra body/banner/table/spacer/divider)
   const staticIds = ['subject','banner','body','wmi','table','cta','sender'];
@@ -3865,6 +5615,79 @@ const SECTION_TYPES = [
     webinarOnly: true,
     svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="12" y="14" width="56" height="14" rx="5" fill="#2962ef"/><text x="40" y="24" text-anchor="middle" font-family="Arial" font-size="7" fill="#ffffff" font-weight="700">Watch Live Tonight →</text><text x="40" y="40" text-anchor="middle" font-family="Arial" font-size="7" fill="#bbbbbb">Free to watch · No download</text></svg>`
   },
+  // ── Promotion / content section types ──
+  {
+    id: 'eyebrow-text',
+    name: 'Eyebrow Text',
+    sub: 'Small label above headline',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="22" y="10" width="36" height="8" rx="4" fill="#2962ef"/><text x="40" y="16.5" text-anchor="middle" font-family="Arial" font-size="5.5" fill="#fff" font-weight="700">LABEL</text><rect x="10" y="24" width="60" height="6" rx="2" fill="#0e1f3d"/><rect x="16" y="34" width="48" height="4" rx="1" fill="#c0cce0"/></svg>`
+  },
+  {
+    id: 'title-only',
+    name: 'Title Only',
+    sub: 'Bold section heading',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="8" y="20" width="64" height="10" rx="2" fill="#0e1f3d"/></svg>`
+  },
+  {
+    id: 'cta-disclaimer',
+    name: 'CTA Disclaimer',
+    sub: 'Fine-print below CTA',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="8" y="10" width="64" height="3" rx="1" fill="#c0cce0"/><rect x="8" y="16" width="56" height="3" rx="1" fill="#c0cce0"/><rect x="8" y="22" width="60" height="3" rx="1" fill="#c0cce0"/><rect x="8" y="28" width="40" height="3" rx="1" fill="#c0cce0"/></svg>`
+  },
+  {
+    id: 'numbered-steps',
+    name: 'Numbered Steps',
+    sub: 'Blue circles + step rows',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><circle cx="16" cy="14" r="6" fill="#2962ef"/><text x="16" y="16.5" text-anchor="middle" font-family="Arial" font-size="7" fill="#fff" font-weight="700">1</text><rect x="26" y="11" width="46" height="3" rx="1" fill="#0e1f3d"/><rect x="26" y="16" width="36" height="2.5" rx="1" fill="#8899b8"/><rect x="6" y="24" width="68" height="0.5" fill="#d5dae2"/><circle cx="16" cy="34" r="6" fill="#2962ef"/><text x="16" y="36.5" text-anchor="middle" font-family="Arial" font-size="7" fill="#fff" font-weight="700">2</text><rect x="26" y="31" width="42" height="3" rx="1" fill="#0e1f3d"/><rect x="26" y="36" width="32" height="2.5" rx="1" fill="#8899b8"/></svg>`
+  },
+  {
+    id: 'task-cards',
+    name: 'Task Cards',
+    sub: 'TASK label + amount + desc',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="6" y="6" width="68" height="18" rx="4" fill="#eef0f8"/><text x="14" y="15.5" font-family="Arial" font-size="5.5" fill="#2962ef" font-weight="700">TASK 1 · DEPOSIT</text><text x="14" y="21.5" font-family="Arial" font-size="8" fill="#0e1f3d" font-weight="700">USD 300</text><rect x="6" y="28" width="68" height="16" rx="4" fill="#eef0f8"/><text x="14" y="35.5" font-family="Arial" font-size="5.5" fill="#2962ef" font-weight="700">TASK 2 · TRADE</text><text x="14" y="41.5" font-family="Arial" font-size="8" fill="#0e1f3d" font-weight="700">0.6 lots</text></svg>`
+  },
+  {
+    id: 'stat-row',
+    name: 'Stat Highlight Row',
+    sub: '3-column stats, last highlighted',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="4" y="10" width="22" height="30" rx="4" fill="#eef0f8"/><text x="15" y="25" text-anchor="middle" font-family="Arial" font-size="7" fill="#0e1f3d" font-weight="700">20%</text><text x="15" y="33" text-anchor="middle" font-family="Arial" font-size="4.5" fill="#8899b8">Cashback</text><rect x="29" y="10" width="22" height="30" rx="4" fill="#eef0f8"/><text x="40" y="25" text-anchor="middle" font-family="Arial" font-size="7" fill="#0e1f3d" font-weight="700">+5%</text><text x="40" y="33" text-anchor="middle" font-family="Arial" font-size="4.5" fill="#8899b8">Bonus</text><rect x="54" y="10" width="22" height="30" rx="4" fill="#2962ef"/><text x="65" y="25" text-anchor="middle" font-family="Arial" font-size="7" fill="#fff" font-weight="700">25%</text><text x="65" y="33" text-anchor="middle" font-family="Arial" font-size="4.5" fill="rgba(255,255,255,0.8)">Total</text></svg>`
+  },
+  {
+    id: 'icon-steps',
+    name: 'Numbered Icon Steps',
+    sub: '01/02/03 icon + title + sub',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><circle cx="12" cy="15" r="7" fill="#0e1f3d"/><text x="12" y="17.5" text-anchor="middle" font-family="Arial" font-size="5" fill="#2962ef" font-weight="800">01</text><rect x="22" y="11" width="24" height="3" rx="1" fill="#0e1f3d"/><rect x="22" y="16" width="18" height="2.5" rx="1" fill="#8899b8"/><circle cx="12" cy="32" r="7" fill="#0e1f3d"/><text x="12" y="34.5" text-anchor="middle" font-family="Arial" font-size="5" fill="#2962ef" font-weight="800">02</text><rect x="22" y="28" width="22" height="3" rx="1" fill="#0e1f3d"/><rect x="22" y="33" width="16" height="2.5" rx="1" fill="#8899b8"/></svg>`
+  },
+  {
+    id: 'role-cards',
+    name: 'Role Cards',
+    sub: 'Comparison cards with bullet lists',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="4" y="8" width="34" height="34" rx="4" fill="#eef2ff"/><rect x="42" y="8" width="34" height="34" rx="4" fill="#eef2ff"/><rect x="8" y="12" width="26" height="4" rx="1" fill="#0e1f3d"/><rect x="8" y="20" width="22" height="2.5" rx="1" fill="#2962ef"/><rect x="8" y="25" width="24" height="2.5" rx="1" fill="#2962ef"/><rect x="8" y="30" width="20" height="2.5" rx="1" fill="#2962ef"/><rect x="46" y="12" width="26" height="4" rx="1" fill="#0e1f3d"/><rect x="46" y="20" width="22" height="2.5" rx="1" fill="#2962ef"/><rect x="46" y="25" width="24" height="2.5" rx="1" fill="#2962ef"/><rect x="46" y="30" width="20" height="2.5" rx="1" fill="#2962ef"/></svg>`
+  },
+  {
+    id: 'callout-box',
+    name: 'Callout Box',
+    sub: 'Left-border highlighted box',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="6" y="10" width="3" height="30" rx="1.5" fill="#2962FE"/><rect x="13" y="10" width="61" height="30" rx="3" fill="#f5f8ff"/><rect x="17" y="16" width="48" height="3" rx="1" fill="#2962FE"/><rect x="17" y="22" width="50" height="3" rx="1" fill="#8899b8"/><rect x="17" y="28" width="40" height="3" rx="1" fill="#8899b8"/></svg>`
+  },
+  {
+    id: 'campaign-hero',
+    name: 'Campaign Hero',
+    sub: 'Badge pill + headline + subtitle',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="22" y="8" width="36" height="8" rx="4" fill="#0D47A1"/><text x="40" y="14.5" text-anchor="middle" font-family="Arial" font-size="4.5" fill="#fff" font-weight="700">EXCLUSIVE</text><rect x="8" y="20" width="64" height="8" rx="2" fill="#0e1f3d"/><text x="40" y="26" text-anchor="middle" font-family="Arial" font-size="6" fill="#fff" font-weight="800">Big Headline Here</text><rect x="14" y="32" width="52" height="4" rx="1" fill="#c0cce0"/></svg>`
+  },
+  {
+    id: 'secondary-image',
+    name: 'Secondary Image',
+    sub: 'Inline image with optional caption',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="10" y="8" width="60" height="30" rx="4" fill="#dde4ef"/><circle cx="22" cy="20" r="5" fill="#8899b8"/><polyline points="10,38 28,22 42,32 54,20 70,38" fill="none" stroke="#8899b8" stroke-width="2"/><rect x="20" y="42" width="40" height="3" rx="1" fill="#c0cce0"/></svg>`
+  },
+  {
+    id: 'swap-table',
+    name: 'Swap Table',
+    sub: '3-col swap comparison (navy/green)',
+    svg: `<svg width="80" height="50" viewBox="0 0 80 50" xmlns="http://www.w3.org/2000/svg"><rect width="80" height="50" rx="5" fill="#f0f4f8"/><rect x="4" y="8" width="24" height="10" rx="1" fill="#0E1F3D"/><rect x="30" y="8" width="20" height="10" rx="1" fill="#22835F"/><rect x="52" y="8" width="24" height="10" rx="1" fill="#3DA37A"/><rect x="4" y="20" width="24" height="22" rx="1" fill="#fff"/><rect x="30" y="20" width="20" height="22" rx="1" fill="#F0FAF5"/><rect x="52" y="20" width="24" height="22" rx="1" fill="#fff"/><text x="16" y="34" text-anchor="middle" font-family="Arial" font-size="7" fill="#B91C1C" font-weight="700">-68</text><text x="40" y="34" text-anchor="middle" font-family="Arial" font-size="7" fill="#22835F" font-weight="700">0</text><text x="64" y="30" text-anchor="middle" font-family="Arial" font-size="5" fill="#22835F" font-weight="700">0 (qual)</text><text x="64" y="37" text-anchor="middle" font-family="Arial" font-size="5" fill="#0E1F3D">-34</text></svg>`
+  },
 ];
 
 // Sections that can only appear once
@@ -3873,6 +5696,9 @@ const SINGLE_SECTIONS = [
   'webinar-header', 'webinar-banner', 'webinar-datetime',
   'webinar-host', 'webinar-overview', 'webinar-learn', 'webinar-cta'
 ];
+// New promotion section types that are repeatable
+const PROMO_REPEATABLE = ['eyebrow-text','title-only','cta-disclaimer','numbered-steps','task-cards','stat-row','icon-steps',
+  'role-cards','callout-box','campaign-hero','secondary-image','swap-table'];
 
 function openSectionModal() {
   const container = document.getElementById('draggableSections');
@@ -3881,7 +5707,9 @@ function openSectionModal() {
   const isWebinar = !!cfg.isWebinar;
 
   const grid = document.getElementById('sectionCardGrid');
-  const REPEATABLE_SECTION_IDS = ['spacer', 'divider', 'stop-level-explainer', 'hmr-notice', 'body', 'banner', 'table'];
+  const REPEATABLE_SECTION_IDS = ['spacer', 'divider', 'stop-level-explainer', 'hmr-notice', 'body', 'banner', 'table',
+    'eyebrow-text','title-only','cta-disclaimer','numbered-steps','task-cards','stat-row','icon-steps',
+    'role-cards','callout-box','campaign-hero','secondary-image','swap-table'];
 
   // Filter: webinar sections only show for webinar types; non-webinar sections only show for non-webinar types
   const visibleSections = SECTION_TYPES.filter(sec => {
@@ -3919,7 +5747,9 @@ function addSectionFromModal(sectionId) {
   const container = document.getElementById('draggableSections');
 
   // Repeatable sections (can be added more than once)
-  const REPEATABLE_SECTIONS = ['spacer', 'divider', 'stop-level-explainer', 'hmr-notice', 'body', 'banner', 'table'];
+  const REPEATABLE_SECTIONS = ['spacer', 'divider', 'stop-level-explainer', 'hmr-notice', 'body', 'banner', 'table',
+    'eyebrow-text','title-only','cta-disclaimer','numbered-steps','task-cards','stat-row','icon-steps',
+    'role-cards','callout-box','campaign-hero','secondary-image','swap-table'];
 
   // If section already exists AND is not repeatable, scroll to it
   if (!REPEATABLE_SECTIONS.includes(sectionId)) {
@@ -4018,6 +5848,22 @@ function addSectionFromModal(sectionId) {
         <button class="fmt-btn" onclick="fmt2('bold','${bodyUid}')" title="Bold"><b>B</b></button>
         <button class="fmt-btn" onclick="fmt2('italic','${bodyUid}')" title="Italic"><i>I</i></button>
         <button class="fmt-btn" onclick="fmt2('underline','${bodyUid}')" title="Underline"><u>U</u></button>
+        <button class="fmt-btn" onclick="fmtAlign('${bodyUid}','left')" title="Align Left">⬛L</button>
+        <button class="fmt-btn" onclick="fmtAlign('${bodyUid}','center')" title="Align Center">⬛C</button>
+        <button class="fmt-btn" onclick="fmtAlign('${bodyUid}','right')" title="Align Right">⬛R</button>
+        <select class="fmt-btn" onchange="fmtFontSize('${bodyUid}',this.value);this.value=''" title="Font Size" style="font-size:11px;padding:0 2px;min-width:60px;">
+          <option value="">Size</option>
+          <option value="12px">12px</option>
+          <option value="13px">13px</option>
+          <option value="14px">14px</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="22px">22px</option>
+          <option value="24px">24px</option>
+          <option value="28px">28px</option>
+          <option value="32px">32px</option>
+        </select>
         <button class="fmt-btn" onclick="fmtLink2('${bodyUid}')" title="Link">🔗</button>
         <button class="fmt-btn" onclick="fmtList2('${bodyUid}')" title="Bullet List">≡</button>
         <button class="fmt-btn" onclick="fmtClear2('${bodyUid}')" title="Clear">✕</button>
@@ -4035,6 +5881,226 @@ function addSectionFromModal(sectionId) {
       <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);display:block;margin-bottom:4px;">Disclaimer text <span style="font-weight:400;">(rendered as small italic footnote)</span></label>
       <textarea id="${disclaimerUid}_text" rows="3" placeholder="** Please note that…" style="width:100%;font-size:12px;resize:vertical;" oninput="updatePreview()"></textarea>
     </div>`;
+  }
+
+  // ── New promotion / content section types ──
+
+  if (sectionId === 'eyebrow-text') {
+    const uid = 'eyebrow_' + Date.now();
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'eyebrow-text';
+    newSection.dataset.uid = uid;
+    newSection.innerHTML = handle + `<div style="padding:12px 18px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Alignment:</label>
+        <button class="fmt-btn" onclick="document.getElementById('${uid}_align').value='left';updatePreview();">⬛L</button>
+        <button class="fmt-btn" onclick="document.getElementById('${uid}_align').value='center';updatePreview();">⬛C</button>
+        <button class="fmt-btn" onclick="document.getElementById('${uid}_align').value='right';updatePreview();">⬛R</button>
+        <input type="hidden" id="${uid}_align" value="center">
+        <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-left:8px;">Style:</label>
+        <label style="font-size:11px;cursor:pointer;"><input type="radio" name="${uid}_style" value="text" checked onchange="updatePreview()"> Text</label>
+        <label style="font-size:11px;cursor:pointer;"><input type="radio" name="${uid}_style" value="pill" onchange="updatePreview()"> Pill/Button</label>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px;">
+        <button class="fmt-btn" onclick="fmtEyebrow('${uid}','bold')" title="Bold"><b>B</b></button>
+        <button class="fmt-btn" onclick="fmtEyebrow('${uid}','italic')" title="Italic"><i>I</i></button>
+        <button class="fmt-btn" onclick="fmtEyebrow('${uid}','underline')" title="Underline"><u>U</u></button>
+      </div>
+      <input type="text" id="${uid}_text" placeholder="e.g. KVB EXCLUSIVE CASHBACK" oninput="updatePreview()" style="font-size:13px;width:100%;box-sizing:border-box;">
+      <div class="hint-text" style="margin-top:4px;">Small label / eyebrow text rendered above a headline.</div>
+    </div>`;
+  } else if (sectionId === 'title-only') {
+    const uid = 'title_' + Date.now();
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'title-only';
+    newSection.dataset.uid = uid;
+    newSection.innerHTML = handle + `<div style="padding:12px 18px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;">
+        <button class="fmt-btn" onclick="fmt2('bold','${uid}_content')" title="Bold"><b>B</b></button>
+        <button class="fmt-btn" onclick="fmt2('italic','${uid}_content')" title="Italic"><i>I</i></button>
+        <button class="fmt-btn" onclick="fmt2('underline','${uid}_content')" title="Underline"><u>U</u></button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}_content','left')" title="Left">⬛L</button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}_content','center')" title="Center">⬛C</button>
+        <button class="fmt-btn" onclick="fmtAlign('${uid}_content','right')" title="Right">⬛R</button>
+        <select class="fmt-btn" onchange="fmtFontSize('${uid}_content',this.value);this.value=''" style="font-size:11px;padding:0 2px;min-width:60px;">
+          <option value="">Size</option>
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="22px">22px</option>
+          <option value="24px">24px</option>
+          <option value="28px">28px</option>
+          <option value="32px">32px</option>
+        </select>
+      </div>
+      <div class="content-area" id="${uid}_content" contenteditable="true" oninput="updatePreview()" style="min-height:40px;font-size:18px;font-weight:700;"></div>
+      <div class="hint-text" style="margin-top:4px;">Section title / heading only.</div>
+    </div>`;
+  } else if (sectionId === 'cta-disclaimer') {
+    const uid = 'ctadisc_' + Date.now();
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'cta-disclaimer';
+    newSection.dataset.uid = uid;
+    newSection.innerHTML = handle + `<div style="padding:12px 18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+        <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);">Style:</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;">
+          <input type="radio" name="${uid}_boxstyle" value="plain" checked onchange="updatePreview()"> Plain text
+        </label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer;">
+          <input type="radio" name="${uid}_boxstyle" value="box" onchange="updatePreview()"> With callout box
+        </label>
+      </div>
+      <label style="font-size:11px;font-weight:600;color:var(--kvb-muted);display:block;margin-bottom:4px;">Disclaimer / fine-print text</label>
+      <textarea id="${uid}_text" rows="3" placeholder="T&amp;Cs apply. Offer valid until…" style="width:100%;font-size:12px;resize:vertical;" oninput="updatePreview()"></textarea>
+      <div class="hint-text" style="margin-top:4px;">Plain: small gray italic text. Box: blue left-border callout.</div>
+    </div>`;
+  } else if (sectionId === 'numbered-steps') {
+    const uid = 'numsteps_' + Date.now();
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'numbered-steps';
+    newSection.dataset.uid = uid;
+    // Default 3 steps
+    const defaultSteps = [
+      {title:'Join the campaign', desc:'Log in to KVB and participate in the campaign.'},
+      {title:'Open your box', desc:'Choose 1 gift box and reveal your welcome-back reward.'},
+      {title:'Unlock your reward', desc:'Complete the tasks, then return to the campaign page and click "Claim Reward".'},
+    ];
+    const stepsJson = JSON.stringify(defaultSteps).replace(/"/g,'&quot;');
+    newSection.innerHTML = handle + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Numbered steps colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" checked onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="minimal" onchange="updatePreview()"> <span style="font-size:11px;">Minimal</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">Numbered steps with circle numbers + optional emoji</div>
+      <div id="${uid}_steps"></div>
+      <button class="btn-add-wmi" onclick="numStepsAdd('${uid}')" style="margin-top:6px;">+ Add Step</button>
+    </div>`;
+    newSection.dataset.stepsData = stepsJson;
+  } else if (sectionId === 'task-cards') {
+    const uid = 'taskcards_' + Date.now();
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'task-cards';
+    newSection.dataset.uid = uid;
+    const defaultTasks = [
+      {label:'TASK 1 · DEPOSIT', amount:'USD 300', desc:'Make a single qualifying deposit of at least USD 300.'},
+      {label:'TASK 2 · TRADE', amount:'0.6 lots', desc:'Accumulate qualifying trading volume of at least 0.6 lot (each trade held ≥ 180 seconds).'},
+    ];
+    const tasksJson = JSON.stringify(defaultTasks).replace(/"/g,'&quot;');
+    newSection.innerHTML = handle + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Task card colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" checked onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="dark" onchange="updatePreview()"> <span style="font-size:11px;">Dark</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="minimal" onchange="updatePreview()"> <span style="font-size:11px;">Minimal</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">Task cards — TASK label, amount, description</div>
+      <div id="${uid}_tasks"></div>
+      <button class="btn-add-wmi" onclick="taskCardsAdd('${uid}')" style="margin-top:6px;">+ Add Task</button>
+    </div>`;
+    newSection.dataset.tasksData = tasksJson;
+  } else if (sectionId === 'stat-row') {
+    const uid = 'statrow_' + Date.now();
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'stat-row';
+    newSection.dataset.uid = uid;
+    const defaultStats = [
+      {value:'20%', label:'Cashback on qualifying deposit amount', highlight:false},
+      {value:'+5%', label:'Special privilege for USDT deposits', highlight:false},
+      {value:'25%', label:'Maximum total cashback credit', highlight:true},
+    ];
+    const statsJson = JSON.stringify(defaultStats).replace(/"/g,'&quot;');
+    newSection.innerHTML = handle + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Stat row colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" checked onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="dark" onchange="updatePreview()"> <span style="font-size:11px;">Dark</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="minimal" onchange="updatePreview()"> <span style="font-size:11px;">Minimal</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">3-column stat row — tick "highlight" to mark the accent column</div>
+      <div id="${uid}_stats"></div>
+      <button class="btn-add-wmi" onclick="statRowAdd('${uid}')" style="margin-top:6px;">+ Add Stat</button>
+    </div>`;
+    newSection.dataset.statsData = statsJson;
+  } else if (sectionId === 'icon-steps') {
+    const uid = 'iconsteps_' + Date.now();
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'icon-steps';
+    newSection.dataset.uid = uid;
+    const defaultIconSteps = [
+      {num:'01', title:'Register', sub:'Join the Cashback campaign via the program website'},
+      {num:'02', title:'Deposit', sub:'Make a qualifying deposit after joining the campaign'},
+      {num:'03', title:'Trade & Earn Cashback', sub:'Accumulate qualifying trading volume and receive tiered Cashback'},
+    ];
+    const stepsJson = JSON.stringify(defaultIconSteps).replace(/"/g,'&quot;');
+    newSection.innerHTML = handle + `<div style="padding:12px 18px;">
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:6px;">Icon steps colour scheme:</div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px;">
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="dark" checked onchange="updatePreview()"> <span style="font-size:11px;">Dark</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="blue" onchange="updatePreview()"> <span style="font-size:11px;">Blue</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="navy" onchange="updatePreview()"> <span style="font-size:11px;">Navy</span></label>
+        <label style="cursor:pointer;"><input type="radio" name="${uid}_palette" value="green" onchange="updatePreview()"> <span style="font-size:11px;">Green</span></label>
+      </div>
+      <div style="font-size:11px;font-weight:600;color:var(--kvb-muted);margin-bottom:8px;">Numbered icon steps — 01/02/03 dark circle + title + subtitle</div>
+      <div id="${uid}_isteps"></div>
+      <button class="btn-add-wmi" onclick="iconStepsAdd('${uid}')" style="margin-top:6px;">+ Add Step</button>
+    </div>`;
+    newSection.dataset.istepsData = stepsJson;
+  } else if (sectionId === 'role-cards') {
+    const uid = 'role-cards_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'role-cards';
+    const initialCards = [
+      { title: 'Option A', bullets: ['Benefit one', 'Benefit two', 'Benefit three'] },
+      { title: 'Option B', bullets: ['Benefit one', 'Benefit two', 'Benefit three'] }
+    ];
+    newSection.dataset.uid = uid;
+    newSection.dataset.cardsData = JSON.stringify(initialCards);
+    newSection.innerHTML = handle + buildRoleCardsPanel(uid, '🃏 Role Comparison Cards', initialCards);
+    setTimeout(() => { roleCardsRender(uid); updatePreview(); }, 50);
+  } else if (sectionId === 'callout-box') {
+    const uid = 'callout-box_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'callout-box';
+    newSection.dataset.uid = uid;
+    newSection.innerHTML = handle + buildCalloutBoxPanel(uid);
+  } else if (sectionId === 'campaign-hero') {
+    const uid = 'campaign-hero_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'campaign-hero';
+    newSection.dataset.uid = uid;
+    newSection.innerHTML = handle + buildCampaignHeroPanel(uid);
+  } else if (sectionId === 'secondary-image') {
+    const uid = 'secondary-image_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'secondary-image';
+    newSection.dataset.uid = uid;
+    newSection.innerHTML = handle + buildSecondaryImagePanel(uid);
+  } else if (sectionId === 'swap-table') {
+    const uid = 'swap-table_' + Date.now() + '_' + Math.random().toString(36).slice(2,6);
+    newSection = document.createElement('div');
+    newSection.className = 'panel-section panel-section-draggable';
+    newSection.dataset.sectionId = 'swap-table';
+    newSection.dataset.uid = uid;
+    newSection.innerHTML = handle + buildSwapTablePanel(uid);
   }
 
   // ── Webinar sections — build proper editable panels ──
@@ -4150,6 +6216,16 @@ function addSectionFromModal(sectionId) {
   if (newSection) {
     container.appendChild(newSection);
     newSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // Init dynamic UI for new promo section types
+    if (sectionId === 'numbered-steps' && newSection.dataset.uid) {
+      setTimeout(() => numStepsRender(newSection.dataset.uid), 30);
+    } else if (sectionId === 'task-cards' && newSection.dataset.uid) {
+      setTimeout(() => taskCardsRender(newSection.dataset.uid), 30);
+    } else if (sectionId === 'stat-row' && newSection.dataset.uid) {
+      setTimeout(() => statRowRender(newSection.dataset.uid), 30);
+    } else if (sectionId === 'icon-steps' && newSection.dataset.uid) {
+      setTimeout(() => iconStepsRender(newSection.dataset.uid), 30);
+    }
     updatePreview();
   }
 }
