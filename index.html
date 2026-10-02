@@ -985,12 +985,7 @@
     <span class="topnav-badge">GEM Desk</span>
   </div>
   <div class="topnav-right">
-    <select id="langSelect" onchange="setLanguage(this.value)" title="Email Language" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:12px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;outline:none;height:30px;">
-      <option value="en" style="background:#0e1f3d;color:#fff;">🌐 EN</option>
-      <option value="th" style="background:#0e1f3d;color:#fff;">🇹🇭 TH</option>
-      <option value="vi" style="background:#0e1f3d;color:#fff;">🇻🇳 VI</option>
-      <option value="zh" style="background:#0e1f3d;color:#fff;">🇨🇳 ZH</option>
-    </select>
+    
     <button class="btn-reset" onclick="resetAll()">↺ Reset</button>
     <button onclick="gemOpenLoad()" style="background:none;border:1px solid rgba(255,255,255,0.3);color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;">📂 Load</button>
     <button onclick="gemOpenSave()" style="background:#1f71e8;border:none;color:#fff;font-size:12px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;white-space:nowrap;">💾 Save</button>
@@ -4173,7 +4168,7 @@ ${allSectionsHtml}
                   </a>
                 </td>
                 <td style="text-align: right; padding-right: 24px;">
-                  <a href="https://mykvb.com/login" target="_blank" style="text-decoration: none; font-size: 13px; font-weight: 500; color: rgb(153, 153, 153);">Sign In</a>
+                  <a href="https://mykvb.com/login" target="_blank" style="text-decoration: none; font-size: 25px; font-weight: 500; color: rgb(153, 153, 153);">Sign In</a>
                 </td>
               </tr>
             </table>
@@ -5370,9 +5365,7 @@ function getLangFooterSignOff() {
 function getLangRiskDisclosure() {
   const rd = {
     en: '<br>Risk Disclosure: Trading Foreign Exchange and other derivatives products involve risk, please read and understand the nature of the trading which you are about to engage in and the extent of your exposure and risk.<br><br>The content of this email is marketing material and should not be considered investment advice, personal recommendation, or an offer or solicitation to buy or sell any financial instruments.',
-    th: 'การเปิดเผยความเสี่ยง: การซื้อขายอัตราแลกเปลี่ยนเงินตราต่างประเทศและผลิตภัณฑ์อนุพันธ์อื่นๆ มีความเสี่ยง กรุณาอ่านและทำความเข้าใจลักษณะการซื้อขายที่คุณกำลังจะดำเนินการและขอบเขตของความเสี่ยงที่คุณอาจได้รับ',
-    vi: 'Tiết lộ rủi ro: Giao dịch ngoại hối và các sản phẩm phái sinh khác đều có rủi ro. Vui lòng đọc và hiểu rõ bản chất của hoạt động giao dịch và mức độ rủi ro mà bạn có thể gặp phải.',
-    zh: '风险披露：外汇及其他衍生品交易存在风险，请在交易前详细阅读并理解您所从事交易的性质及相关风险。',
+ 
   };
   return rd[currentLang] || rd.en;
 }
