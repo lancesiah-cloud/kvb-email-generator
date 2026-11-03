@@ -1176,7 +1176,7 @@
           <!-- Date range -->
           <div class="field-group">
             <div class="field-label">Date Range (subtitle)</div>
-            <input type="text" id="wmiDateRange" placeholder="e.g. September 22 – September 26, 2026" oninput="updatePreview()">
+            <input type="text" id="wmiDateRange" placeholder="e.g. September 22 – September 26, 2026" oninput="updatePreview();wmiAutoCalcDayLabels()">
           </div>
 
           <!-- Banner URL -->
@@ -1191,37 +1191,9 @@
             <textarea id="wmiIntro" rows="4" placeholder="This week's market focus turns to…" oninput="updatePreview()" style="resize:vertical;"></textarea>
           </div>
 
-          <!-- Economic calendar -->
-          <div class="wmi-section-label">Economic Calendar</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;margin-top:6px;">
-            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid var(--kvb-blue);border-radius:6px;font-size:11px;background:#eef3ff;">
-              <input type="radio" name="wmi-cal-style" value="classic" checked onchange="wmiCalendarStyle='classic';updatePreview();" style="accent-color:var(--kvb-blue);">
-              <span><strong>Classic</strong> <span style="color:var(--kvb-muted);">White bg</span></span>
-            </label>
-            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid #d0d5dd;border-radius:6px;font-size:11px;background:transparent;">
-              <input type="radio" name="wmi-cal-style" value="dark" onchange="wmiCalendarStyle='dark';updatePreview();" style="accent-color:var(--kvb-blue);">
-              <span><strong>Dark</strong> <span style="color:var(--kvb-muted);">Navy bg</span></span>
-            </label>
-            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid #d0d5dd;border-radius:6px;font-size:11px;background:transparent;">
-              <input type="radio" name="wmi-cal-style" value="minimal" onchange="wmiCalendarStyle='minimal';updatePreview();" style="accent-color:var(--kvb-blue);">
-              <span><strong>Minimal</strong> <span style="color:var(--kvb-muted);">No border</span></span>
-            </label>
-            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid #d0d5dd;border-radius:6px;font-size:11px;background:transparent;">
-              <input type="radio" name="wmi-cal-style" value="striped" onchange="wmiCalendarStyle='striped';updatePreview();" style="accent-color:var(--kvb-blue);">
-              <span><strong>Striped</strong> <span style="color:var(--kvb-muted);">Alt rows</span></span>
-            </label>
+          <div style="margin-top:4px;padding:8px 10px;background:#f0f4ff;border-radius:6px;font-size:11px;color:#2962ef;">
+            💡 Economic Calendar and Market Analysis Cards are now separate draggable sections below — drag them to reorder.
           </div>
-          <div id="wmiCalendar">
-            <!-- Calendar day groups injected by JS -->
-          </div>
-          <button class="btn-add-wmi" onclick="wmiAddDay()">+ Add Day</button>
-
-          <!-- Asset cards -->
-          <div class="wmi-section-label" style="margin-top:16px;">Market Analysis Cards</div>
-          <div id="wmiCards">
-            <!-- Asset cards injected by JS -->
-          </div>
-          <button class="btn-add-wmi" onclick="wmiAddCard()">+ Add Asset Card</button>
         </div>
       </div>
 
@@ -1286,6 +1258,54 @@
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- WMI Economic Calendar Panel (draggable, shown only for WMI) -->
+      <div class="panel-section panel-section-draggable wmi-panel" id="wmiEconCalPanel" data-section-id="wmi-econ-cal" draggable="true">
+        <div class="drag-handle" title="Drag to reorder">
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect y="0" width="16" height="2" rx="1"/><rect y="4" width="16" height="2" rx="1"/><rect y="8" width="16" height="2" rx="1"/></svg>
+          <span>📅 Economic Calendar</span>
+        </div>
+        <div style="padding:14px 18px 16px;">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid var(--kvb-blue);border-radius:6px;font-size:11px;background:#eef3ff;">
+              <input type="radio" name="wmi-cal-style" value="classic" checked onchange="wmiCalendarStyle='classic';updatePreview();" style="accent-color:var(--kvb-blue);">
+              <span><strong>Classic</strong> <span style="color:var(--kvb-muted);">White bg</span></span>
+            </label>
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid #d0d5dd;border-radius:6px;font-size:11px;">
+              <input type="radio" name="wmi-cal-style" value="dark" onchange="wmiCalendarStyle='dark';updatePreview();" style="accent-color:var(--kvb-blue);">
+              <span><strong>Dark</strong> <span style="color:var(--kvb-muted);">Navy bg</span></span>
+            </label>
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid #d0d5dd;border-radius:6px;font-size:11px;">
+              <input type="radio" name="wmi-cal-style" value="minimal" onchange="wmiCalendarStyle='minimal';updatePreview();" style="accent-color:var(--kvb-blue);">
+              <span><strong>Minimal</strong> <span style="color:var(--kvb-muted);">No border</span></span>
+            </label>
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 9px;border:1.5px solid #d0d5dd;border-radius:6px;font-size:11px;">
+              <input type="radio" name="wmi-cal-style" value="striped" onchange="wmiCalendarStyle='striped';updatePreview();" style="accent-color:var(--kvb-blue);">
+              <span><strong>Striped</strong> <span style="color:var(--kvb-muted);">Alt rows</span></span>
+            </label>
+          </div>
+          <div style="margin-bottom:8px;padding:8px 10px;background:#f0f4ff;border-radius:6px;font-size:11px;color:#2962ef;">
+            💡 Day labels auto-calculate from the date range in the WMI Builder. Or type them manually below.
+          </div>
+          <div id="wmiCalendar"><!-- Calendar day groups injected by JS --></div>
+          <div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">
+            <button class="btn-add-wmi" onclick="wmiAddDay()">+ Add Day</button>
+            <button class="btn-add-wmi" onclick="wmiAutoCalcDayLabels()" style="background:#e8f0fe;color:#2962ef;border:1px solid #c5d3f7;" title="Auto-fill Mon–Fri day names from the date range above">🗓 Auto-fill Day Labels</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- WMI Market Analysis Cards Panel (draggable, shown only for WMI) -->
+      <div class="panel-section panel-section-draggable wmi-panel" id="wmiMarketCardsPanel" data-section-id="wmi-market-cards" draggable="true">
+        <div class="drag-handle" title="Drag to reorder">
+          <svg width="16" height="10" viewBox="0 0 16 10" fill="currentColor"><rect y="0" width="16" height="2" rx="1"/><rect y="4" width="16" height="2" rx="1"/><rect y="8" width="16" height="2" rx="1"/></svg>
+          <span>📊 Market Analysis Cards</span>
+        </div>
+        <div style="padding:14px 18px 16px;">
+          <div id="wmiCards"><!-- Asset cards injected by JS --></div>
+          <button class="btn-add-wmi" onclick="wmiAddCard()" style="margin-top:6px;">+ Add Asset Card</button>
         </div>
       </div>
 
@@ -1699,12 +1719,14 @@ function setTypeConfig(type) {
   const isSpecial = isWMI || isWebinar;
 
   document.getElementById('wmiPanel').classList.toggle('visible', isWMI);
+  document.getElementById('wmiEconCalPanel').classList.toggle('visible', isWMI);
+  document.getElementById('wmiMarketCardsPanel').classList.toggle('visible', isWMI);
 
-  // Hide standard banner + body panels for webinar types
+  // Hide standard banner + body panels for webinar/WMI types
   const bannerSection = document.querySelector('#draggableSections [data-section-id="banner"]:not([data-uid])');
   const bodySection = document.querySelector('#draggableSections [data-section-id="body"]:not([data-uid])');
-  if (bannerSection) bannerSection.style.display = isWebinar ? 'none' : '';
-  if (bodySection) bodySection.style.display = isWebinar ? 'none' : '';
+  if (bannerSection) bannerSection.style.display = (isWebinar || isWMI) ? 'none' : '';
+  if (bodySection) bodySection.style.display = (isWebinar || isWMI) ? 'none' : '';
   document.getElementById('webinarPanel')?.classList.toggle('visible', isWebinar);
 
   document.getElementById('contentArea').innerHTML = cfg.defaultContent || '';
@@ -2166,18 +2188,53 @@ let wmiCalendarStyle = 'classic';
 // Asset cards: array of { ticker, sentiment, date, chartUrl, support, resistance, analysis }
 let wmiCards = [];
 
+// Helper: given a date-range string like "2 Nov – 6 Nov, 2026", return the Monday Date
+function wmiParseMondayFromRange(rangeStr) {
+  if (!rangeStr) return null;
+  // Try to parse "D Mon – D Mon, YYYY" or "D Month – D Month, YYYY"
+  const months = {'jan':0,'feb':1,'mar':2,'apr':3,'may':4,'jun':5,'jul':6,'aug':7,'sep':8,'oct':9,'nov':10,'dec':11,
+    'january':0,'february':1,'march':2,'april':3,'may':4,'june':5,'july':6,'august':7,'september':8,'october':9,'november':10,'december':11};
+  const m = rangeStr.match(/(\d{1,2})\s+([a-z]+)/i);
+  const yearM = rangeStr.match(/(\d{4})/);
+  if (!m || !yearM) return null;
+  const day = parseInt(m[1]);
+  const mon = months[m[2].toLowerCase()];
+  const year = parseInt(yearM[1]);
+  if (mon === undefined || isNaN(day) || isNaN(year)) return null;
+  return new Date(year, mon, day);
+}
+
+// Auto-calc day labels Mon–Fri from a start date
+function wmiAutoCalcDayLabels() {
+  const rangeStr = document.getElementById('wmiDateRange') ? document.getElementById('wmiDateRange').value : '';
+  const startDate = wmiParseMondayFromRange(rangeStr);
+  if (!startDate) return;
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const fmt = d => `${dayNames[d.getDay()]}, ${d.getDate()} ${monthNames[d.getMonth()]} ${d.getFullYear()}`;
+  wmiCalendarDays.forEach((day, i) => {
+    if (i < 5) {
+      const d = new Date(startDate.getTime() + i * 86400000);
+      day.day = fmt(d);
+    }
+  });
+  renderWMICalendar();
+  updatePreview();
+}
+
 function wmiInitDefaults() {
   const now = new Date();
-  // Find the upcoming Monday
-  const day = now.getDay();
-  const daysUntilMon = day === 0 ? 1 : (8 - day) % 7 || 7;
-  const mon = new Date(now); mon.setDate(now.getDate() + (day === 1 ? 0 : daysUntilMon));
+  // Find the current or upcoming Monday
+  const dow = now.getDay();
+  const daysToMon = dow === 0 ? 1 : dow === 1 ? 0 : 8 - dow;
+  const mon = new Date(now); mon.setDate(now.getDate() + daysToMon);
   const fri = new Date(mon); fri.setDate(mon.getDate() + 4);
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const dayNames = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   const fmt = (d) => `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
   const fmtShort = (d) => `${d.getDate()} ${months[d.getMonth()].slice(0,3)}`;
   const dateRange = `${fmtShort(mon)} – ${fmtShort(fri)}, ${fri.getFullYear()}`;
+  const fmtDay = (d) => `${dayNames[d.getDay()]}, ${fmt(d)}`;
 
   // Populate WMI date range field
   const drField = document.getElementById('wmiDateRange');
@@ -2186,38 +2243,44 @@ function wmiInitDefaults() {
   // Populate intro field
   const introField = document.getElementById('wmiIntro');
   if (introField && !introField.value) {
-    introField.value = `Global markets remain focused on key central bank signals and macro data this week. Gold (XAUUSD) continues to attract safe-haven demand amid ongoing uncertainty, while EURUSD consolidates ahead of critical inflation releases. Traders should watch for elevated volatility around the Fed speakers and major data prints listed in the calendar below.`;
+    introField.value = `Global markets remain focused on key central bank signals and macro data this week. Gold (XAUUSD) continues to attract safe-haven demand amid ongoing uncertainty, while GBPUSD consolidates ahead of critical data releases. Traders should watch for elevated volatility around the major releases listed in the calendar below and whether key price zones hold or break.`;
   }
 
   wmiCalendarDays = [
     {
-      day: `Tuesday, ${fmt(new Date(mon.getTime() + 86400000))}`,
+      day: fmtDay(mon),
       events: [
-        { time: '15:00', region: 'US', name: 'CB Consumer Confidence', cons: '103.5', prev: '102.0' },
-        { time: '17:00', region: 'US', name: 'JOLTS Job Openings', cons: '7.90M', prev: '8.10M' },
+        { time: '22:45', region: 'US', name: 'S&P Global Manufacturing PMI', cons: '56.0', prev: '56.0' },
+        { time: '23:00', region: 'US', name: 'ISM Manufacturing PMI', cons: '54.7', prev: '54.5' },
       ]
     },
     {
-      day: `Wednesday, ${fmt(new Date(mon.getTime() + 2*86400000))}`,
+      day: fmtDay(new Date(mon.getTime() + 86400000)),
       events: [
-        { time: '14:15', region: 'US', name: 'ADP Non-Farm Employment Change', cons: '140K', prev: '143K' },
-        { time: '15:00', region: 'EU', name: 'ECB President Lagarde Speech', cons: '—', prev: '—' },
-        { time: '20:00', region: 'US', name: 'FOMC Meeting Minutes', cons: '—', prev: '—' },
+        { time: '11:30', region: 'AU', name: 'RBA Interest Rate Decision', cons: '—', prev: '—' },
+        { time: '23:00', region: 'US', name: 'JOLTS Job Openings', cons: '—', prev: '—' },
       ]
     },
     {
-      day: `Thursday, ${fmt(new Date(mon.getTime() + 3*86400000))}`,
+      day: fmtDay(new Date(mon.getTime() + 2*86400000)),
       events: [
-        { time: '14:30', region: 'US', name: 'Initial Jobless Claims', cons: '215K', prev: '219K' },
-        { time: '14:30', region: 'US', name: 'Core PCE Price Index m/m', cons: '0.2%', prev: '0.1%' },
+        { time: '21:15', region: 'US', name: 'ADP Nonfarm Employment Change', cons: '—', prev: '—' },
+        { time: '23:00', region: 'US', name: 'ISM Non-Manufacturing PMI', cons: '—', prev: '—' },
       ]
     },
     {
-      day: `Friday, ${fmt(new Date(mon.getTime() + 4*86400000))}`,
+      day: fmtDay(new Date(mon.getTime() + 3*86400000)),
       events: [
-        { time: '14:30', region: 'US', name: 'Non-Farm Payrolls', cons: '175K', prev: '187K' },
-        { time: '14:30', region: 'US', name: 'Unemployment Rate', cons: '4.1%', prev: '4.2%' },
-        { time: '16:00', region: 'US', name: 'ISM Manufacturing PMI', cons: '49.5', prev: '48.4' },
+        { time: '20:00', region: 'UK', name: 'BoE Interest Rate Decision', cons: '—', prev: '—' },
+        { time: '21:30', region: 'US', name: 'Initial Jobless Claims', cons: '—', prev: '—' },
+      ]
+    },
+    {
+      day: fmtDay(fri),
+      events: [
+        { time: '21:30', region: 'US', name: 'Nonfarm Payrolls', cons: '—', prev: '—' },
+        { time: '21:30', region: 'US', name: 'Unemployment Rate', cons: '—', prev: '—' },
+        { time: '21:30', region: 'US', name: 'Average Hourly Earnings (MoM)', cons: '—', prev: '—' },
       ]
     },
   ];
@@ -2225,21 +2288,21 @@ function wmiInitDefaults() {
   wmiCards = [
     {
       ticker: 'XAUUSD',
-      sentiment: 'Bullish',
-      date: fmtShort(fri) + ' ' + fri.getFullYear(),
+      sentiment: 'Bearish',
+      date: fmtShort(mon) + ' ' + mon.getFullYear(),
       chartUrl: '',
-      support: '3,180 / 3,150',
-      resistance: '3,260 / 3,290',
-      analysis: 'Gold remains well-supported above the $3,180 level as investors seek safety amid geopolitical uncertainty and USD softness. A sustained break above $3,260 could open a move toward the $3,290 zone. Key risk: stronger-than-expected NFP data may trigger a pullback toward support.'
+      support: '3,870 / 3,880',
+      resistance: '3,930 / 3,960',
+      analysis: 'Gold remains under pressure around $3,906 after rebounding from the $3,870–$3,880 support zone. A sustained break above $3,960 could open a recovery toward $3,990–$4,020. Key risk: a break below $3,870 could extend the decline toward the $3,850 psychological level.'
     },
     {
-      ticker: 'EURUSD',
-      sentiment: 'Cautiously Bullish',
-      date: fmtShort(fri) + ' ' + fri.getFullYear(),
+      ticker: 'GBPUSD',
+      sentiment: 'Bullish',
+      date: fmtShort(mon) + ' ' + mon.getFullYear(),
       chartUrl: '',
-      support: '1.0820 / 1.0780',
-      resistance: '1.0960 / 1.1010',
-      analysis: 'EURUSD is consolidating in a range ahead of the ECB speech and US PCE data. The pair finds support at 1.0820 with resistance clustering near 1.0960. A hawkish ECB tone or soft US data could push the pair toward the upper bound, while a risk-off shift may see a retest of 1.0780.'
+      support: '1.3350 / 1.3360',
+      resistance: '1.3410 / 1.3430',
+      analysis: 'GBPUSD is trading around 1.3380 after retreating from the 1.3410–1.3430 resistance zone. A sustained break above 1.3430 could extend the recovery toward 1.3470–1.3490. Key risk: a break below 1.3350–1.3360 could trigger a deeper pullback toward 1.3280–1.3300.'
     },
   ];
 }
@@ -2280,14 +2343,20 @@ function wmiRemoveCard(i) {
   updatePreview();
 }
 
+let wmiCalDragSrc = null;
+
 function renderWMICalendar() {
   const container = document.getElementById('wmiCalendar');
   container.innerHTML = '';
   wmiCalendarDays.forEach((day, di) => {
     const block = document.createElement('div');
     block.className = 'wmi-cal-block';
+    block.draggable = true;
+    block.dataset.dayIdx = di;
+    // Day drag handle + header row
     let html = `<div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
-      <input type="text" value="${escAttr(day.day)}" placeholder="e.g. Thursday, Sep 25, 2026" style="flex:1;font-size:11px;font-weight:700;" oninput="wmiCalendarDays[${di}].day=this.value;updatePreview()">
+      <span class="wmi-day-drag-handle" title="Drag to reorder day" style="cursor:grab;color:#94a3b8;font-size:14px;flex-shrink:0;user-select:none;">⠿</span>
+      <input type="text" value="${escAttr(day.day)}" placeholder="e.g. Monday, 9 Nov 2026" style="flex:1;font-size:11px;font-weight:700;" oninput="wmiCalendarDays[${di}].day=this.value;updatePreview()">
       <button class="btn-remove-wmi" onclick="wmiRemoveDay(${di})" title="Remove day">✕</button>
     </div>`;
     day.events.forEach((ev, ei) => {
@@ -2306,6 +2375,28 @@ function renderWMICalendar() {
     });
     html += `<button class="btn-add-wmi" style="margin-top:4px;" onclick="wmiAddEvent(${di})">+ Add Event</button>`;
     block.innerHTML = html;
+
+    // Drag-to-reorder day blocks
+    block.addEventListener('dragstart', e => {
+      wmiCalDragSrc = di;
+      e.dataTransfer.effectAllowed = 'move';
+      block.style.opacity = '0.4';
+    });
+    block.addEventListener('dragend', () => { block.style.opacity = ''; });
+    block.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; block.style.outline = '2px dashed #2962ef'; });
+    block.addEventListener('dragleave', () => { block.style.outline = ''; });
+    block.addEventListener('drop', e => {
+      e.preventDefault(); e.stopPropagation();
+      block.style.outline = '';
+      const targetIdx = parseInt(block.dataset.dayIdx);
+      if (wmiCalDragSrc === null || wmiCalDragSrc === targetIdx) return;
+      const moved = wmiCalendarDays.splice(wmiCalDragSrc, 1)[0];
+      wmiCalendarDays.splice(targetIdx, 0, moved);
+      wmiCalDragSrc = null;
+      renderWMICalendar();
+      updatePreview();
+    });
+
     container.appendChild(block);
   });
 }
@@ -2681,7 +2772,7 @@ function generateWMIHTML(forPreview) {
   const intro = document.getElementById('wmiIntro').value.trim() || 'This week\'s market focus includes key economic events and technical analysis for major assets.';
 
   // Logo: always use real S3 URL (artifact CSP doesn't block images)
-  const logoSrc = KVB_LOGO_WMI;
+  const logoSrc = KVB_LOGO;
 
   // Banner: use placeholder in preview if no URL provided
   const bannerSrc = wmiBannerUrl || (forPreview ? PLACEHOLDER_BANNER_HTML : '');
@@ -2744,7 +2835,7 @@ function generateWMIHTML(forPreview) {
 <tr>
 <td style="padding:14px 18px;border-bottom:1px solid #eef2f6;">
 <strong style="font-size:14px;color:#0F172A;">${escHtml(card.ticker)}</strong>
-${(()=>{const s=card.sentiment||'';const isBull=s==='Bullish'||s==='Cautiously Bullish';const isBear=s==='Bearish'||s==='Cautiously Bearish';const bg=isBull?'#e8f5ee':isBear?'#fdecea':'#f1f3f5';const col=isBull?'#1a7a4a':isBear?'#cc3333':'#6b7280';return `<span style="margin-left:8px;padding:3px 10px;font-size:10px;font-weight:700;color:${col};background:${bg};border-radius:999px;">${escHtml(s)}</span>`;})()}
+${(()=>{const s=card.sentiment||'';const isBull=s==='Bullish'||s==='Cautiously Bullish';const isBear=s==='Bearish'||s==='Cautiously Bearish';const bg=isBull?'#22c55e':isBear?'#ef4444':'#9ca3af';const arrow=isBull?'▲':isBear?'▼':'';const label=arrow?`${arrow} ${escHtml(s)} ${arrow}`:escHtml(s);return `<span style="margin-left:8px;padding:3px 10px;font-size:10px;font-weight:700;color:#ffffff;background:${bg};border-radius:999px;">${label}</span>`;})()}
 <span style="float:right;font-size:11px;color:#8a94a6;padding:5px 0px;">${escHtml(card.date)}</span>
 </td>
 </tr>${chartHtml}
@@ -2885,8 +2976,19 @@ ${bannerHtml}
 <p style="margin:0;font-size:12px;line-height:1.8;letter-spacing:0.2px;color:#1a1a1a;">${escHtml(intro)}</p>
 </div>
 </td></tr>
-${wmiStdBannerHtml}${calHtml}
-${cardsHtml}${wmiStdBodyHtml}${wmiTablesHtml}${wmiDynamicHtml}
+${wmiStdBannerHtml}${(()=>{
+  // Respect drag order: check which panel (econ-cal vs market-cards) comes first in the DOM
+  const calPanel = document.getElementById('wmiEconCalPanel');
+  const cardsPanel = document.getElementById('wmiMarketCardsPanel');
+  if (calPanel && cardsPanel) {
+    const pos = calPanel.compareDocumentPosition(cardsPanel);
+    if (pos & Node.DOCUMENT_POSITION_PRECEDING) {
+      // cardsPanel is before calPanel — render cards first
+      return cardsHtml + calHtml;
+    }
+  }
+  return calHtml + '\n' + cardsHtml;
+})()}${wmiStdBodyHtml}${wmiTablesHtml}${wmiDynamicHtml}
 
 
 ${wmiShowCta ? `<tr><td style="padding:18px 40px 28px 40px;text-align:center;">
