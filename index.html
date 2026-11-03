@@ -1289,6 +1289,13 @@
         </div>
       </div>
 
+      <!-- Webinar Panel (shown only for webinar types) -->
+      <div class="panel-section wmi-panel" id="webinarPanel">
+        <div style="padding:14px 18px;">
+          <p style="margin:0;font-size:12px;color:var(--kvb-muted);">Webinar sections are injected below automatically when this type is selected.</p>
+        </div>
+      </div>
+
       <!-- Sender -->
       <div class="panel-section panel-section-draggable" data-section-id="sender" draggable="true">
         <div class="drag-handle" title="Drag to reorder">
@@ -1754,12 +1761,7 @@ function setTypeConfig(type) {
         `<div style="padding:14px 18px 14px;">
           <div class="field-group">
             <div class="field-label">Banner Image URL</div>
-            <input type="url" id="${uid}_url" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()">
-          </div>
-          <div class="field-group" style="margin-top:8px;">
-            <div class="field-label">Banner Link URL <span style="font-weight:400;color:var(--kvb-muted);">(optional)</span></div>
-            <input type="url" id="${uid}_link" placeholder="https://mykvb.com/…" oninput="updatePreview()">
-          </div> id="webinarBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()">
+            <input type="url" id="webinarBannerUrl" placeholder="https://static.mykvb.com/crm/…" oninput="updatePreview()">
           </div>
           <div class="field-group" style="margin-top:8px;">
             <div class="field-label">Banner Link URL <span style="font-weight:400;color:var(--kvb-muted);">(optional)</span></div>
@@ -2508,149 +2510,137 @@ function webinarRemoveCtaItem(idx) {
 //  WEBINAR HTML GENERATION
 // ─────────────────────────────────────────────────────────
 function generateWebinarHTML(subtype, forPreview) {
-  // Read field values (fields live inside dynamically-injected sections)
   const getVal = (id, fallback) => { const el = document.getElementById(id); return el ? (el.value || fallback) : fallback; };
-  const title = getVal('webinarTitle', '[Session Title]');
-  const date = getVal('webinarDate', '[Date]');
-  const time = getVal('webinarTime', '[Time]');
-  const platforms = webinarPlatformItems.filter(p => p.label.trim());
+  const title      = getVal('webinarTitle',    '[Session Title]');
+  const date       = getVal('webinarDate',     '[Date]');
+  const time       = getVal('webinarTime',     '[Time]');
+  const language   = getVal('webinarLanguage', 'Taglish');
+  const hostName   = getVal('webinarHostName', '[Host Name]');
+  const hostInit   = getVal('webinarHostInitials', '??');
+  const hostRole   = getVal('webinarHostRole', '[Host Role]');
+  const overview   = getVal('webinarOverview', '');
+  const intro      = getVal('webinarIntro',    '');
+  const bannerUrl  = getVal('webinarBannerUrl','');
+  const bannerLnk  = getVal('webinarBannerLinkUrl','');
+  const platforms  = webinarPlatformItems.filter(p => p.label.trim());
   const ctaButtons = webinarCtaItems.filter(c => c.label.trim());
+  const learnItems = webinarLearnItems.filter(s => s.trim());
   const subjectLine = document.getElementById('subjectInput').value || title;
-  const logoSrc = 'https://hk-prod-new88-email.s3.ap-east-1.amazonaws.com/email_template/kvb-logo.png';
+  const logoSrc    = 'https://hk-prod-new88-email.s3.ap-east-1.amazonaws.com/email_template/kvb-logo.png';
+  const PLACEHOLDER = 'https://via.placeholder.com/600x200/0e1f3d/ffffff?text=Banner+Image';
 
-  // Build email sections in DOM order
-  let emailSectionsHtml = '';
-  const draggableWeb = document.getElementById('draggableSections');
+  const platformStr = platforms.length > 0
+    ? platforms.map(p => p.url ? `<a href="${escAttr(p.url)}" target="_blank" style="color:#2962ef;text-decoration:none;">${escHtml(p.label)}</a>` : escHtml(p.label)).join(' &amp; ')
+    : 'YouTube &amp; Facebook';
 
-  if (draggableWeb) {
-    draggableWeb.querySelectorAll('.panel-section-draggable').forEach(sec => {
-      const sid = sec.dataset.sectionId;
+  // Banner
+  const bannerSrc = bannerUrl || (forPreview ? PLACEHOLDER : '');
+  const bannerImg = bannerSrc
+    ? `\n<!-- Banner -->\n<tr><td style="font-size:0;line-height:0;background-color:#000000;">\n${bannerLnk ? `<a href="${escAttr(bannerLnk)}" target="_blank" style="display:block;">` : ''}<img src="${escAttr(bannerSrc)}" width="600" alt="KVB Live Session Banner" style="display:block;width:100%;max-width:600px;height:auto;border:0;">${bannerLnk ? '</a>' : ''}\n</td></tr>`
+    : '';
 
-      if (sid === 'webinar-header') {
-        const t = getVal('webinarTitle', '[Session Title]');
-        const intro = getVal('webinarIntro', '');
-        if (subtype === 'announcement') {
-          const introHtml = intro
-            ? `\n<p style="margin:0;font-size:15px;line-height:1.6;color:#64748B;text-align:left;">${escHtml(intro)}</p>`
-            : '';
-          emailSectionsHtml += `\n<!-- Title + Intro -->\n<tr><td style="padding:20px 20px 0 20px;">\n<p style="margin:0 0 14px 0;font-size:24px;line-height:1.3;font-weight:700;color:#0F172A;text-align:left;">${escHtml(t)}</p>${introHtml}\n</td></tr>`;
-        } else {
-          emailSectionsHtml += `\n<!-- Don't Miss Out badge -->\n<tr><td style="padding:20px 16px 0 16px;">\n<table role="presentation" cellpadding="0" cellspacing="0">\n<tr>\n<td style="vertical-align:middle;"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td width="8" height="8" style="width:8px;height:8px;background-color:#ff3b30;border-radius:50%;font-size:0;line-height:0;">&nbsp;</td></tr></table></td>\n<td style="padding-left:7px;vertical-align:middle;"><span style="font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#2962ef;">Don't Miss Out</span></td>\n</tr>\n</table>\n</td></tr>\n<!-- Title -->\n<tr><td style="padding:14px 16px 0 16px;">\n<p style="margin:0;font-size:24px;line-height:1.3;font-weight:700;color:#0F172A;text-align:left;">${escHtml(t)}</p>\n</td></tr>`;
-        }
-
-      } else if (sid === 'webinar-banner') {
-        const bannerUrl = getVal('webinarBannerUrl', '');
-        const bannerSrc = bannerUrl || (forPreview ? PLACEHOLDER_BANNER_HTML : '');
-        if (bannerSrc) {
-          const wbnrLnk = getVal('webinarBannerLinkUrl', ''); const wbnrImg = `<img src="${escAttr(bannerSrc)}" width="600" alt="KVB Live Session Banner" style="display:block;width:100%;max-width:600px;height:auto;border:0;">`; emailSectionsHtml += `\n<!-- Banner -->\n<tr><td style="font-size:0;line-height:0;background-color:#000000;">\n${wbnrLnk ? `<a href="${escAttr(wbnrLnk)}" target="_blank" style="display:block;">${wbnrImg}</a>` : wbnrImg}\n</td></tr>`;
-        }
-
-      } else if (sid === 'webinar-datetime') {
-        if (subtype === 'announcement') {
-          // Datetime is shown in the host card (webinar-host section), skip standalone output here
-          // unless no host section exists
-          const hasHostSec = !!draggableWeb.querySelector('[data-section-id="webinar-host"]');
-          if (!hasHostSec) {
-            emailSectionsHtml += `\n<!-- Date/Time/Platform -->\n<tr><td style="padding:20px 20px 0 20px;">\n<p style="margin:0 0 5px 0;font-size:14px;color:#444444;">&#128197;&nbsp; ${escHtml(date)}</p>\n<p style="margin:0 0 5px 0;font-size:14px;color:#444444;">&#128340;&nbsp; ${escHtml(time)}</p>\n<p style="margin:0;font-size:14px;color:#444444;">&#9654;&nbsp; ${platforms.length > 0 ? platforms.map(p => p.url ? `<a href="${escAttr(p.url)}" target="_blank" style="color:#2962ef;text-decoration:none;">${escHtml(p.label)}</a>` : escHtml(p.label)).join(' &amp; ') : 'YouTube &amp; Facebook'}</p>\n</td></tr>`;
-          }
-        } else {
-          // Reminder: full 2x2 info grid
-          const language = getVal('webinarLanguage', 'Taglish');
-          emailSectionsHtml += `\n<!-- Info Grid 2x2 -->\n<tr><td style="padding:20px 16px 0 16px;">\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;">\n<tr>\n<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">\n<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Date</p>\n<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${escHtml(date)}</p>\n</td>\n<td width="10" style="width:10px;">&nbsp;</td>\n<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">\n<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Time</p>\n<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${escHtml(time)}</p>\n</td>\n</tr>\n<tr><td colspan="3" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>\n<tr>\n<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">\n<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Where</p>\n<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${platforms.length > 0 ? platforms.map(p => p.url ? `<a href="${escAttr(p.url)}" target="_blank" style="color:#2962ef;text-decoration:none;font-weight:500;">${escHtml(p.label)}</a>` : escHtml(p.label)).join(' &amp; ') : 'YouTube &amp; Facebook'}</p>\n</td>\n<td width="10" style="width:10px;">&nbsp;</td>\n<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">\n<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Language</p>\n<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${escHtml(language)}</p>\n</td>\n</tr>\n</table>\n</td></tr>`;
-        }
-
-      } else if (sid === 'webinar-host') {
-        const hostName = getVal('webinarHostName', '[Host Name]');
-        const hostInitials = getVal('webinarHostInitials', '??');
-        const hostRole = getVal('webinarHostRole', '[Host Role]');
-        emailSectionsHtml += `\n<!-- Section Title: Your Host -->\n<tr><td style="padding:28px 20px 0 20px;">\n<p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2962ef;">Your Host</p>\n</td></tr>\n<!-- Host card -->\n<tr><td style="padding:14px 20px 0 20px;">\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F6FF;border-radius:14px;border:1px solid #E4EAFF;border-collapse:separate;">\n<tr>\n<td width="62" valign="top" style="padding:18px 0 18px 20px;width:62px;">\n<div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#2962ef,#03135a);font-size:17px;font-weight:800;color:#FFFFFF;display:flex;align-items:center;justify-content:center;text-align:center;line-height:54px;flex-shrink:0;">${escHtml(hostInitials)}</div>\n</td>\n<td valign="top" style="padding:18px 20px 18px 16px;">\n<p style="margin:0;font-size:19px;font-weight:700;color:#111111;">${escHtml(hostName)}</p>\n<p style="margin:3px 0 10px 0;font-size:14px;color:#888888;">${escHtml(hostRole)}</p>\n<p style="margin:0 0 5px 0;font-size:14px;color:#444444;">&#128197;&nbsp; ${escHtml(date)}</p>\n<p style="margin:0 0 5px 0;font-size:14px;color:#444444;">&#128340;&nbsp; ${escHtml(time)}</p>\n<p style="margin:0;font-size:14px;color:#444444;">&#9654;&nbsp; ${platforms.length > 0 ? platforms.map(p => p.url ? `<a href="${escAttr(p.url)}" target="_blank" style="color:#2962ef;text-decoration:none;">${escHtml(p.label)}</a>` : escHtml(p.label)).join(' &amp; ') : 'YouTube &amp; Facebook'}</p>\n</td>\n</tr>\n</table>\n</td></tr>`;
-
-      } else if (sid === 'webinar-overview') {
-        const overview = getVal('webinarOverview', '');
-        if (overview) {
-          emailSectionsHtml += `\n<!-- Section Title: Session Overview -->\n<tr><td style="padding:28px 20px 0 20px;">\n<p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2962ef;">Session Overview</p>\n</td></tr>\n<tr><td style="padding:14px 20px 0 20px;">\n<p style="margin:0;font-size:15px;line-height:1.75;color:#444444;border-left:3px solid #2962ef;padding-left:14px;">${escHtml(overview)}</p>\n</td></tr>`;
-        }
-
-      } else if (sid === 'webinar-learn') {
-        const learnItems = webinarLearnItems.filter(s => s.trim());
-        if (learnItems.length > 0) {
-          let lHtml = `\n<!-- Section Title: What You'll Learn -->\n<tr><td style="padding:28px 20px 0 20px;">\n<p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2962ef;">What You'll Learn</p>\n</td></tr>\n\n<tr><td style="padding:14px 20px 0 20px;">\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #EEF0F8;border-radius:14px;border-collapse:separate;overflow:hidden;">`;
-          learnItems.forEach((item, i) => {
-            const isLast = i === learnItems.length - 1;
-            const num = String(i + 1).padStart(2, '0');
-            lHtml += `\n<tr><td style="${isLast ? '' : 'border-bottom:1px solid #F0F2FA;'}padding:14px 18px;">\n<table role="presentation" cellpadding="0" cellspacing="0" width="100%"><tr>\n<td width="30" valign="top" style="padding-right:14px;padding-top:1px;"><span style="display:inline-block;font-size:12px;font-weight:800;color:#2962ef;background-color:#EEF2FF;border-radius:6px;padding:2px 7px;">${num}</span></td>\n<td style="font-size:15px;color:#222222;line-height:1.5;">${escHtml(item)}</td>\n</tr></table>\n</td></tr>`;
-          });
-          lHtml += `\n</table>\n</td></tr>`;
-          emailSectionsHtml += lHtml;
-        }
-
-      } else if (sid === 'webinar-cta') {
-        const btns = ctaButtons.length > 0 ? ctaButtons : [{ label: (subtype === 'reminder' ? 'Watch Live Tonight →' : 'Register Now →'), url: 'https://mykvb.com/' }];
-        emailSectionsHtml += `\n<!-- Webinar CTA -->\n<tr><td style="padding:28px 20px 18px 20px;text-align:center;">\n${btns.map(btn => `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 10px auto;"><tr><td align="center" bgcolor="#0D47A1" style="background-color:#0D47A1;border-radius:14px;"><a href="${escAttr(btn.url || 'https://mykvb.com/')}" target="_blank" style="display:inline-block;font-size:16px;font-weight:700;color:#FFFFFF;text-align:center;padding:16px 40px;border-radius:14px;text-decoration:none;letter-spacing:0.3px;">${escHtml(btn.label)}</a></td></tr></table>`).join('\n')}\n<p style="margin:5px 0 0 0;font-size:11px;color:#BBBBBB;text-align:center;">Free to watch &nbsp;&middot;&nbsp; No download needed</p>\n</td></tr>`;
-
-      } else if (sid === 'spacer') {
-        const inp = sec.querySelector('input[type="number"]');
-        const h = (inp && +inp.value > 0) ? +inp.value : 20;
-        emailSectionsHtml += `\n<tr><td><div style="height:${h}px;line-height:${h}px;font-size:1px;">&nbsp;</div></td></tr>`;
-      } else if (sid === 'divider') {
-        emailSectionsHtml += `\n<tr><td style="padding:0 20px;"><hr style="border:none;border-top:1px solid #e5e5e5;margin:16px 0;"></td></tr>`;
-      } else if (sid === 'stop-level-explainer') {
-        const uid = sec.dataset.uid;
-        const bodyInput = uid ? document.getElementById(uid + '_body') : null;
-        const bodyText = bodyInput ? bodyInput.value.trim() : '';
-        const bodyContent = bodyText || 'When the stop level is set to X points, pending orders and Stop Loss / Take Profit orders that are within X points of the current market price cannot be placed or modified.';
-        emailSectionsHtml += `\n<tr><td style="padding:16px 20px 0 20px;">\n<table role="presentation" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">\n<tr>\n<td style="background-color:#0e1f3d;border-radius:10px;padding:20px 24px;">\n<p style="margin:0 0 10px 0;font-size:16px;font-weight:700;color:#ffffff;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">What is stop level &amp; how will it affect your trading?</p>\n<p style="margin:0;font-size:14px;color:rgba(255,255,255,0.85);line-height:1.6;font-style:italic;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">${escHtml(bodyContent)}</p>\n</td>\n</tr>\n</table>\n</td></tr>`;
-      } else if (sid === 'hmr-notice') {
-        const uid = sec.dataset.uid;
-        const timeInput = uid ? document.getElementById(uid + '_time') : null;
-        let hmrText = 'Please note that Higher Margin Requirements will be applied during the scheduled event window. Please ensure your account has sufficient funds to meet these requirements.';
-        if (timeInput && timeInput.value) {
-          const parts = timeInput.value.split(/[-T:]/);
-          const eventDate = new Date(+parts[0], +parts[1]-1, +parts[2], +parts[3]||0, +parts[4]||0, 0);
-          const before = new Date(eventDate.getTime() - 15 * 60000);
-          const after = new Date(eventDate.getTime() + 5 * 60000);
-          const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-          const fmt = dt => `${String(dt.getDate()).padStart(2,'0')} ${months[dt.getMonth()]} ${dt.getFullYear()}, ${String(dt.getHours()).padStart(2,'0')}:${String(dt.getMinutes()).padStart(2,'0')} (UTC+3)`;
-          hmrText = `Please note that Higher Margin Requirements will be applied from ${fmt(before)} to ${fmt(after)}. During this time, the margin required to open or maintain a position will be temporarily increased. Please ensure your account has sufficient funds to meet these requirements.`;
-        }
-        emailSectionsHtml += `\n<tr><td style="padding:12px 20px;font-size:14px;color:rgb(10,30,61);line-height:1.6;font-style:italic;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">${escHtml(hmrText)}</td></tr>`;
-      } else if (sid === 'body' && sec.dataset.uid) {
-        const uid = sec.dataset.uid;
-        const extraBodyEl = document.getElementById(uid);
-        if (extraBodyEl && extraBodyEl.innerHTML.trim()) {
-          emailSectionsHtml += `\n<tr><td style="padding:12px 20px;font-size:14px;color:#1a1a1a;line-height:1.6;">${extraBodyEl.innerHTML}</td></tr>`;
-        }
-      } else if (sid === 'banner' && sec.dataset.uid) {
-        const extraBannerUrlEl = document.getElementById(sec.dataset.uid + '_url');
-        const extraBannerSrc = extraBannerUrlEl ? extraBannerUrlEl.value.trim() : '';
-        if (forPreview || extraBannerSrc) {
-          emailSectionsHtml += `\n<tr><td style="font-size:0;line-height:0;background-color:#000000;">\n<img src="${escAttr(extraBannerSrc || (forPreview ? PLACEHOLDER_BANNER_HTML : ''))}" width="600" alt="Banner" style="display:block;width:100%;max-width:600px;height:auto;border:0;">\n</td></tr>`;
-        }
-      } else if (sid === 'table') {
-        // Tables from table builder (same as standard template)
-        tables.forEach(tbl => {
-          if (tbl.title) {
-            emailSectionsHtml += `\n<tr><td style="padding:16px 20px 0 20px;"><p style="margin:0;font-size:15px;font-weight:700;color:#0F172A;">${escHtml(tbl.title)}</p></td></tr>`;
-          }
-          emailSectionsHtml += `\n<tr><td style="padding:20px 20px 0 20px;">` + buildEmailTable(tbl) + `\n</td></tr>`;
-        });
-      }
+  // Learn items
+  let learnHtml = '';
+  if (learnItems.length > 0) {
+    learnHtml = `\n<!-- Section Title: What You'll Learn -->\n<tr><td style="padding:28px 20px 0 20px;">\n<p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2962ef;">What You'll Learn</p>\n</td></tr>\n\n<tr><td style="padding:14px 20px 0 20px;">\n<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #EEF0F8;border-radius:14px;border-collapse:separate;overflow:hidden;">`;
+    learnItems.forEach((item, i) => {
+      const isLast = i === learnItems.length - 1;
+      const num = String(i + 1).padStart(2, '0');
+      learnHtml += `\n<tr><td style="${isLast ? '' : 'border-bottom:1px solid #F0F2FA;'}padding:14px 18px;">\n<table role="presentation" cellpadding="0" cellspacing="0" width="100%"><tr>\n<td width="30" valign="top" style="padding-right:14px;padding-top:1px;"><span style="display:inline-block;font-size:12px;font-weight:800;color:#2962ef;background-color:#EEF2FF;border-radius:6px;padding:2px 7px;">${num}</span></td>\n<td style="font-size:15px;color:#222222;line-height:1.5;">${escHtml(item)}</td>\n</tr></table>\n</td></tr>`;
     });
+    learnHtml += `\n</table>\n</td></tr>`;
   }
 
-  // Standard body content (from #contentArea — included if filled)
-  const webStdBody = document.getElementById('contentArea') ? document.getElementById('contentArea').innerHTML.trim() : '';
-  const webStdBodyHtml = webStdBody
-    ? `\n<tr><td style="padding:20px 20px 0 20px;font-size:14px;color:#1a1a1a;line-height:1.6;">${webStdBody}</td></tr>`
-    : '';
+  // CTA buttons
+  const btns = ctaButtons.length > 0 ? ctaButtons : [{ label: subtype === 'reminder' ? 'Watch Live Tonight →' : 'Register Now →', url: 'https://mykvb.com/' }];
+  const ctaHtml = `\n<!-- Webinar CTA -->\n<tr><td style="padding:28px 20px 18px 20px;text-align:center;">\n${btns.map(btn => `<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto 10px auto;"><tr><td align="center" bgcolor="#0D47A1" style="background-color:#0D47A1;border-radius:14px;"><a href="${escAttr(btn.url||'https://mykvb.com/')}" target="_blank" style="display:inline-block;font-size:16px;font-weight:700;color:#FFFFFF;text-align:center;padding:16px 40px;border-radius:14px;text-decoration:none;letter-spacing:0.3px;">${escHtml(btn.label)}</a></td></tr></table>`).join('\n')}\n<p style="margin:5px 0 0 0;font-size:11px;color:#BBBBBB;text-align:center;">Free to watch &nbsp;&middot;&nbsp; No download needed</p>\n</td></tr>`;
 
-  // Standard CTA (from ctaToggle — included if enabled, in addition to webinar-specific CTAs)
-  const webShowStdCta = document.getElementById('ctaToggle') && document.getElementById('ctaToggle').checked;
-  const webStdCtaLabel = webShowStdCta ? (document.getElementById('ctaLabel').value || 'Start Trading') : '';
-  const webStdCtaUrl = webShowStdCta ? (document.getElementById('ctaUrl').value || 'https://mykvb.com/trade') : '';
-  const webStdCtaHtml = webShowStdCta
-    ? `\n<tr><td style="padding:8px 20px 0 20px;text-align:center;"><table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 auto;"><tr><td align="center" bgcolor="#0D47A1" style="background-color:#0D47A1;border-radius:14px;"><a href="${escAttr(webStdCtaUrl)}" target="_blank" style="display:inline-block;font-size:16px;font-weight:700;color:#FFFFFF;text-align:center;padding:16px 40px;border-radius:14px;text-decoration:none;">${escHtml(webStdCtaLabel)}</a></td></tr></table></td></tr>`
-    : '';
+  let body = '';
+
+  if (subtype === 'announcement') {
+    // ── ANNOUNCEMENT ──────────────────────────────────────────
+    const introHtml = intro
+      ? `\n<p style="margin:0;font-size:15px;line-height:1.6;color:#64748B;text-align:left;">${escHtml(intro)}</p>`
+      : '';
+
+    const overviewHtml = overview
+      ? `\n<!-- Section Title: Session Overview -->\n<tr><td style="padding:28px 20px 0 20px;">\n<p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2962ef;">Session Overview</p>\n</td></tr>\n<tr><td style="padding:14px 20px 0 20px;">\n<p style="margin:0;font-size:15px;line-height:1.75;color:#444444;border-left:3px solid #2962ef;padding-left:14px;">${escHtml(overview)}</p>\n</td></tr>`
+      : '';
+
+    body = `${bannerImg}
+<!-- Title + Intro -->
+<tr><td style="padding:20px 20px 0 20px;">
+<p style="margin:0 0 14px 0;font-size:24px;line-height:1.3;font-weight:700;color:#0F172A;text-align:left;">${escHtml(title)}</p>${introHtml}
+</td></tr>
+<!-- Section Title: Your Host -->
+<tr><td style="padding:28px 20px 0 20px;">
+<p style="margin:0;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#2962ef;">Your Host</p>
+</td></tr>
+<!-- Host card -->
+<tr><td style="padding:14px 20px 0 20px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F4F6FF;border-radius:14px;border:1px solid #E4EAFF;border-collapse:separate;">
+<tr>
+<td width="62" valign="top" style="padding:18px 0 18px 20px;width:62px;">
+<div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#2962ef,#03135a);font-size:17px;font-weight:800;color:#FFFFFF;display:flex;align-items:center;justify-content:center;text-align:center;line-height:54px;flex-shrink:0;">${escHtml(hostInit)}</div>
+</td>
+<td valign="top" style="padding:18px 20px 18px 16px;">
+<p style="margin:0;font-size:19px;font-weight:700;color:#111111;">${escHtml(hostName)}</p>
+<p style="margin:3px 0 10px 0;font-size:14px;color:#888888;">${escHtml(hostRole)}</p>
+<p style="margin:0 0 5px 0;font-size:14px;color:#444444;">&#128197;&nbsp; ${escHtml(date)}</p>
+<p style="margin:0 0 5px 0;font-size:14px;color:#444444;">&#128340;&nbsp; ${escHtml(time)}</p>
+<p style="margin:0;font-size:14px;color:#444444;">&#9654;&nbsp; ${platformStr}</p>
+</td>
+</tr>
+</table>
+</td></tr>${overviewHtml}${learnHtml}${ctaHtml}`;
+
+  } else {
+    // ── REMINDER ──────────────────────────────────────────────
+    body = `${bannerImg}
+<!-- Don't Miss Out badge -->
+<tr><td style="padding:20px 16px 0 16px;">
+<table role="presentation" cellpadding="0" cellspacing="0">
+<tr>
+<td style="vertical-align:middle;"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td width="8" height="8" style="width:8px;height:8px;background-color:#ff3b30;border-radius:50%;font-size:0;line-height:0;">&nbsp;</td></tr></table></td>
+<td style="padding-left:7px;vertical-align:middle;"><span style="font-size:12px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#2962ef;">Don't Miss Out</span></td>
+</tr>
+</table>
+</td></tr>
+<!-- Title -->
+<tr><td style="padding:14px 16px 0 16px;">
+<p style="margin:0;font-size:24px;line-height:1.3;font-weight:700;color:#0F172A;text-align:left;">${escHtml(title)}</p>
+</td></tr>
+<!-- Info Grid 2x2: Date / Time / Where / Language -->
+<tr><td style="padding:20px 16px 0 16px;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="table-layout:fixed;">
+<tr>
+<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">
+<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Date</p>
+<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${escHtml(date)}</p>
+</td>
+<td width="10" style="width:10px;">&nbsp;</td>
+<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">
+<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Time</p>
+<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${escHtml(time)}</p>
+</td>
+</tr>
+<tr><td colspan="3" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+<tr>
+<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">
+<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Where</p>
+<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${platformStr}</p>
+</td>
+<td width="10" style="width:10px;">&nbsp;</td>
+<td valign="top" style="background-color:#F4F6FF;border-radius:14px;padding:14px 18px;width:50%;">
+<p style="margin:0 0 6px 0;font-size:11px;color:#2962ef;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;">Language</p>
+<p style="margin:0;font-size:15px;color:#161616;font-weight:500;">${escHtml(language)}</p>
+</td>
+</tr>
+</table>
+</td></tr>${learnHtml}${ctaHtml}`;
+  }
+
+  const footerHtml = `\n<!-- Footer -->\n<tr><td style="background-color:#F2F6FA;padding:28px 20px;">\n<p style="margin:0 0 12px 0;font-size:11px;line-height:1.6;color:#64748B;">Risk Disclosure: Trading Foreign Exchange and other derivatives products involve risk, please read and understand the nature of the trading which you are about to engage in and the extent of your exposure and risk.</p>\n<p style="margin:0 0 16px 0;font-size:11px;line-height:1.6;color:#64748B;">The content of this email is marketing material and should not be considered investment advice, personal recommendation, or an offer or solicitation to buy or sell any financial instruments.</p>\n<p style="margin:0 0 12px 0;font-size:11px;text-align:center;color:#0D47A1;">\n<a href="mailto:support@kvbplus.com" style="color:#0D47A1;text-decoration:none;">Customer Support</a>\n&nbsp;|&nbsp;\n<a href="https://mykvb.com/im/" style="color:#0D47A1;text-decoration:none;">Live Chat</a>\n</p>\n<p style="margin:8px 0 0 0;font-size:10px;text-align:center;color:#94A3B8;">Copyright &copy; ${new Date().getFullYear()} KVB. All rights reserved.</p>\n</td></tr>`;
 
   return `<body style="margin:0;padding:0;background-color:#EEF2F8;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
 <div style="display:none;max-height:0;overflow:hidden;">${escHtml(subjectLine)}&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
@@ -2666,20 +2656,8 @@ function generateWebinarHTML(subtype, forPreview) {
 <tr><td align="center" style="padding:16px 20px;text-align:center;">
 <a href="https://mykvb.com/login" target="_blank" style="display:inline-block;"><img src="${logoSrc}" width="103" height="35" alt="KVB" style="display:block;width:103px;height:35px;margin:0 auto;border:0;"></a>
 </td></tr>
-${emailSectionsHtml}
-${webStdBodyHtml}${webStdCtaHtml}
-
-<!-- Footer -->
-<tr><td style="background-color:#F2F6FA;padding:28px 20px;">
-<p style="margin:0 0 12px 0;font-size:11px;line-height:1.6;color:#64748B;">Risk Disclosure: Trading Foreign Exchange and other derivatives products involve risk, please read and understand the nature of the trading which you are about to engage in and the extent of your exposure and risk.</p>
-<p style="margin:0 0 16px 0;font-size:11px;line-height:1.6;color:#64748B;">The content of this email is marketing material and should not be considered investment advice, personal recommendation, or an offer or solicitation to buy or sell any financial instruments.</p>
-<p style="margin:0 0 12px 0;font-size:11px;text-align:center;color:#0D47A1;">
-<a href="mailto:support@kvbplus.com" style="color:#0D47A1;text-decoration:none;">Customer Support</a>
-&nbsp;|&nbsp;
-<a href="https://mykvb.com/im/" style="color:#0D47A1;text-decoration:none;">Live Chat</a>
-</p>
-<p style="margin:8px 0 0 0;font-size:10px;text-align:center;color:#94A3B8;">Copyright &copy; ${new Date().getFullYear()} KVB. All rights reserved.</p>
-</td></tr>
+${body}
+${footerHtml}
 
 </table>
 </td></tr>
@@ -2689,11 +2667,6 @@ ${webStdBodyHtml}${webStdCtaHtml}
 </table>
 </body>`;
 }
-
-// ─────────────────────────────────────────────────────────
-//  WMI HTML GENERATION
-// ─────────────────────────────────────────────────────────
-const KVB_LOGO_WMI = 'https://hk-prod-new88-email.s3.ap-east-1.amazonaws.com/email_template/kvb-logo.png';
 
 
 function makePlaceholderChartSVG(ticker) {
@@ -2771,7 +2744,7 @@ function generateWMIHTML(forPreview) {
 <tr>
 <td style="padding:14px 18px;border-bottom:1px solid #eef2f6;">
 <strong style="font-size:14px;color:#0F172A;">${escHtml(card.ticker)}</strong>
-<span style="margin-left:8px;padding:3px 10px;font-size:10px;font-weight:700;color:#6b7280;background:#f1f3f5;border-radius:999px;">${escHtml(card.sentiment)}</span>
+${(()=>{const s=card.sentiment||'';const isBull=s==='Bullish'||s==='Cautiously Bullish';const isBear=s==='Bearish'||s==='Cautiously Bearish';const bg=isBull?'#e8f5ee':isBear?'#fdecea':'#f1f3f5';const col=isBull?'#1a7a4a':isBear?'#cc3333':'#6b7280';return `<span style="margin-left:8px;padding:3px 10px;font-size:10px;font-weight:700;color:${col};background:${bg};border-radius:999px;">${escHtml(s)}</span>`;})()}
 <span style="float:right;font-size:11px;color:#8a94a6;padding:5px 0px;">${escHtml(card.date)}</span>
 </td>
 </tr>${chartHtml}
